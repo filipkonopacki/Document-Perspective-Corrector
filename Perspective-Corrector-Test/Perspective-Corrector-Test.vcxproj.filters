@@ -3,9 +3,12 @@
   <ItemGroup>
     <ClCompile Include="test.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="..\Document-Perspective-Corrector\src\PerspectiveCorrector.cpp" />
+    <ClCompile Include="..\Document-Perspective-Corrector\src\ManualPerspectiveCorrector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
