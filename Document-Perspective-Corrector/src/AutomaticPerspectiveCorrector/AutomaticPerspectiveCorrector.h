@@ -18,7 +18,8 @@ private:
 	void PreprocessImage();
 	void FindLargestCountur();
 	int MeasureDistanceBetweenPoints(cv::Point a, cv::Point b);
-	void FindDocumentCorners(int epsilon);
+	void FindDocumentCorners();
+	void FindFourDocumentCorners(int epsilon);
 	void SortDocumentCorners();
 	cv::Point FindLeftCorner();
 	void CorrectPerspective();

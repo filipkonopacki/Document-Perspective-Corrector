@@ -8,6 +8,7 @@
 
 
 #define LOG(x) {std::cout << x <<std::endl;}
+#define SHOW(x){cv::imshow("TEST", x);cv::waitKey(0);}
 
 AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector(cv::Mat sourceImage)
 	:sourceImage(sourceImage)
@@ -18,14 +19,28 @@ AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector(cv::Mat sourceImage
 
 void AutomaticPerspectiveCorrector::NormalizeImageSize()
 {
-	cv::resize(sourceImage, sourceImage, cv::Size(600, 800));
+	cv::resize(sourceImage, sourceImage, cv::Size(1200, 1600), cv::INTER_LANCZOS4);
 }
 
 cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage()
 {
 	PreprocessImage();
 	FindLargestCountur();
-	FindDocumentCorners(0);
+
+	if (!debug) {
+		cv::drawContours(sourceImage, contours, largestContourIndex, cv::Scalar(0, 255, 0), 3);
+		cv::imwrite("Contours.png", sourceImage);
+	}
+	
+	FindDocumentCorners();
+
+	if (!debug)
+	{
+		LOG(documentCorners)
+		cv::polylines(sourceImage, documentCorners, true, cv::Scalar(0, 255, 0), 3);
+		cv::imwrite("Contours2.png", sourceImage);
+	}
+	
 	CorrectPerspective();
 	DetectText();
 
@@ -38,48 +53,75 @@ void AutomaticPerspectiveCorrector::PreprocessImage()
 	cv::cvtColor(finalImage, finalImage, cv::COLOR_BGR2GRAY);
 	finalImage.convertTo(finalImage, -1, 1, -50);
 	cv::threshold(finalImage, finalImage, 80, 255, cv::THRESH_BINARY);
-	//cv::Canny(finalImage, finalImage, 30,90);
 }
 
 void AutomaticPerspectiveCorrector::FindLargestCountur()
 {
-	largestContourIndex = 0;
-	cv::findContours(finalImage, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-	for (int i = 1; i < contours.size(); i++)
+	largestContourIndex = 1;
+
+	int maxImageArea = 1200 * 1600;
+	int eightyPercentOfMaxArea = 80 * maxImageArea / 100;
+
+	cv::findContours(finalImage, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+	for (int i = 2; i < contours.size(); i++)
 	{
-		if (cv::contourArea(contours[i]) > cv::contourArea(contours[largestContourIndex]))
+		if (cv::contourArea(contours[i]) > cv::contourArea(contours[largestContourIndex]) && cv::contourArea(contours[i]) < eightyPercentOfMaxArea)
 			largestContourIndex = i;
 	}
 }
 
-void AutomaticPerspectiveCorrector::FindDocumentCorners(int epsilon)
+void AutomaticPerspectiveCorrector::FindDocumentCorners()
 {
-	cv::approxPolyDP(cv::Mat(contours[largestContourIndex]), documentCorners, epsilon, true);
-		if (documentCorners.size() != 4)
-			FindDocumentCorners(epsilon + 1);
+	std::vector<cv::Point> points;
 
+	for (int j = 0; j < contours[largestContourIndex].size(); j++)
+	{
+		points.push_back(contours[largestContourIndex][j]);
+	}
+	
+	cv::convexHull(points, documentCorners);
+	FindFourDocumentCorners(0);
+}
 
+void AutomaticPerspectiveCorrector::FindFourDocumentCorners(int epsilon)
+{
+	cv::approxPolyDP(cv::Mat(documentCorners), documentCorners, epsilon, true);
+	if (documentCorners.size() != 4)
+		FindFourDocumentCorners(epsilon + 1);
 }
 
 
 
 void AutomaticPerspectiveCorrector::CorrectPerspective()
 {
-	cv::Rect boundingRectangle = cv::boundingRect(contours[largestContourIndex]);
 	std::vector<cv::Point> destinationCorners;
 	cv::Mat homography;
+	int destinationImageWidth;
+	int destinationImageHeight;
 
+	int firstSide = MeasureDistanceBetweenPoints(documentCorners.at(0), documentCorners.at(1));
+	int secondSide = MeasureDistanceBetweenPoints(documentCorners.at(0), documentCorners.at(3));
 
-	int destinationImageWidth = MeasureDistanceBetweenPoints(documentCorners.at(0), documentCorners.at(1))*2;
-	int destinationImageHeight = MeasureDistanceBetweenPoints(documentCorners.at(0), documentCorners.at(2))*2;
-	
-	LOG(documentCorners)
+	if (firstSide > secondSide)
+	{
+		destinationImageWidth = secondSide;
+		destinationImageHeight = firstSide;
 
-	destinationCorners.push_back(cv::Point(destinationImageWidth - 1,0));
-	destinationCorners.push_back(cv::Point(0, 0));
-	destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
-	destinationCorners.push_back(cv::Point(destinationImageWidth-1, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, 0));
+	}
+	else
+	{
+		destinationImageWidth = firstSide;
+		destinationImageHeight = secondSide;
 
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, 0));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+	}
 	homography = cv::findHomography(documentCorners, destinationCorners);
 
 	cv::warpPerspective(sourceImage, sourceImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));	
@@ -96,7 +138,7 @@ void AutomaticPerspectiveCorrector::DetectText()
 
 	cv::Mat small;
 	cv::cvtColor(rgb, small, CV_BGR2GRAY);
-
+	SHOW(small);
 	cv::Mat grad;
 	cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
 

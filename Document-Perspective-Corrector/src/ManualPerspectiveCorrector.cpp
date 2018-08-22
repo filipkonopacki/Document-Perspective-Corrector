@@ -3,21 +3,6 @@
 #include <iostream>
 #include <vector>
 
-
-
-bool LoadImage(std::string fileName, cv::Mat &sourceImage)
-{
-	std::string filePath = "C:\\Users\\fkonopac\\Documents\\GitHub\\Document-Perspective-Corrector\\x64\\Debug\\Documents\\" + fileName;
-	sourceImage = cv::imread(filePath);
-
-	if (sourceImage.empty())
-		return false;
-
-	return true;
-}
-
-
-
 cv::Mat sourceImage;
 std::vector<cv::Point2f> sourceCorrespondingPoints;
 
@@ -34,7 +19,6 @@ cv::Mat getCorrectedImage(cv::Mat image)
 
 	std::cout << "Your document photo will be displayed. Double click on 4 corners in order starting with upper corners.\nPress enter to continue" << std::endl;
 	std::cin.get();
-	std::cin.get();
 
 
 	cv::namedWindow("Window");
@@ -50,8 +34,8 @@ cv::Mat getCorrectedImage(cv::Mat image)
 	cv::destroyWindow("Window");
 
 
-	int destinationImageHeight = measureDistanceBetweenPoints(sourceCorrespondingPoints.at(0), sourceCorrespondingPoints.at(3)) * 2;
-	int destinationImageWidth = measureDistanceBetweenPoints(sourceCorrespondingPoints.at(0), sourceCorrespondingPoints.at(1)) * 2;
+	int destinationImageHeight = measureDistanceBetweenPoints(sourceCorrespondingPoints.at(0), sourceCorrespondingPoints.at(3));
+	int destinationImageWidth = measureDistanceBetweenPoints(sourceCorrespondingPoints.at(0), sourceCorrespondingPoints.at(1));
 
 	destinationCorrespondingPoints.push_back(cv::Point(0, 0));
 	destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth, 0));
@@ -63,12 +47,14 @@ cv::Mat getCorrectedImage(cv::Mat image)
 
 	cv::warpPerspective(sourceImage, destinationImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));
 
+	//cv::resize(destinationImage, destinationImage, cv::Size(600, 800), cv::INTER_LANCZOS4);
+
 	return destinationImage;
 }
 
 cv::Mat NormalizeImageSize(cv::Mat image)
 {
-	cv::resize(image, image, cv::Size(600, 800));
+	cv::resize(image, image, cv::Size(600, 800), cv::INTER_LANCZOS4);
 	return image;
 }
 
