@@ -13,7 +13,7 @@ int main()
 	
 	AutomaticPerspectiveCorrector corrector(image);
 	correctedImage = corrector.GetCorrectedImage();
-
+	corrector.DetectText();
 	cv::imshow("Result", correctedImage);
 	cv::waitKey(0);
 }

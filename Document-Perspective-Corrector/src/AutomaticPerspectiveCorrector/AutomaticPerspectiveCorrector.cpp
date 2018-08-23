@@ -13,18 +13,19 @@
 AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector(cv::Mat sourceImage)
 	:sourceImage(sourceImage)
 {
-	NormalizeImageSize();
-	finalImage = this->sourceImage.clone();
+	this->sourceImage = NormalizeImageSize(this->sourceImage);
+	processedImage = this->sourceImage.clone();
 }
 
-void AutomaticPerspectiveCorrector::NormalizeImageSize()
+cv::Mat AutomaticPerspectiveCorrector::NormalizeImageSize(cv::Mat image)
 {
-	cv::resize(sourceImage, sourceImage, cv::Size(1200, 1600), cv::INTER_LANCZOS4);
+	cv::resize(image, image, cv::Size(1200, 1600), cv::INTER_LANCZOS4);
+	return image;
 }
 
 cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage()
 {
-	PreprocessImage();
+	processedImage = PreprocessImage(processedImage);
 	FindLargestCountur();
 
 	if (!debug) {
@@ -42,17 +43,16 @@ cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage()
 	}
 	
 	CorrectPerspective();
-	DetectText();
 
-
-	return sourceImage;
+	return processedImage;
 }
 
-void AutomaticPerspectiveCorrector::PreprocessImage()
+cv::Mat AutomaticPerspectiveCorrector::PreprocessImage(cv::Mat image)
 {
-	cv::cvtColor(finalImage, finalImage, cv::COLOR_BGR2GRAY);
-	finalImage.convertTo(finalImage, -1, 1, -50);
-	cv::threshold(finalImage, finalImage, 80, 255, cv::THRESH_BINARY);
+	cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
+	image.convertTo(image, -1, 1, -40);
+	cv::threshold(image, image, 80, 255, cv::THRESH_BINARY);
+	return image;
 }
 
 void AutomaticPerspectiveCorrector::FindLargestCountur()
@@ -62,7 +62,7 @@ void AutomaticPerspectiveCorrector::FindLargestCountur()
 	int maxImageArea = 1200 * 1600;
 	int eightyPercentOfMaxArea = 80 * maxImageArea / 100;
 
-	cv::findContours(finalImage, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+	cv::findContours(processedImage, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 	for (int i = 2; i < contours.size(); i++)
 	{
 		if (cv::contourArea(contours[i]) > cv::contourArea(contours[largestContourIndex]) && cv::contourArea(contours[i]) < eightyPercentOfMaxArea)
@@ -122,82 +122,62 @@ void AutomaticPerspectiveCorrector::CorrectPerspective()
 		destinationCorners.push_back(cv::Point(0, 0));
 		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
 	}
+
 	homography = cv::findHomography(documentCorners, destinationCorners);
-
-	cv::warpPerspective(sourceImage, sourceImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));	
+	cv::warpPerspective(sourceImage, processedImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));	
 }
-
-
-
-void AutomaticPerspectiveCorrector::DetectText()
-{
-	cv::Mat rgb;
-
-	cv::pyrDown(sourceImage, rgb);
-	cv::pyrDown(rgb, rgb);
-
-	cv::Mat small;
-	cv::cvtColor(rgb, small, CV_BGR2GRAY);
-	SHOW(small);
-	cv::Mat grad;
-	cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
-
-	cv::morphologyEx(small, grad, cv::MORPH_GRADIENT, morphKernel);
-
-	cv::Mat bw;
-	cv::threshold(grad, bw, 0.0, 255.0, cv::THRESH_BINARY | cv::THRESH_OTSU);
-
-	cv::Mat connected;
-	morphKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(9,1));
-	cv::morphologyEx(bw, connected, cv::MORPH_CLOSE, morphKernel);
-	cv::Mat mask = cv::Mat::zeros(bw.size(), CV_8UC1);
-	std::vector<std::vector<cv::Point> > contours;
-	std::vector<cv::Vec4i> hierarchy;
-	cv::findContours(connected, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-	
-
-	for (int idx = 0; idx >= 0; idx = hierarchy[idx][0]) {
-		cv::Rect rect = boundingRect(contours[idx]);
-		cv::Mat maskROI(mask, rect);
-		maskROI = cv::Scalar(0, 0, 0);
-		
-		drawContours(mask, contours, idx, cv::Scalar(255, 255, 255), CV_FILLED);
-
-		cv::RotatedRect rrect = minAreaRect(contours[idx]);
-		double r = (double)countNonZero(maskROI) / (rrect.size.width * rrect.size.height);
-
-		cv::Scalar color;
-		int thickness = 1;
-		
-		if (r > 0.25 &&(rrect.size.height > 8 && rrect.size.width > 8))
-		{
-			thickness = 2;
-			color = cv::Scalar(0, 255, 0);
-		}
-		else
-		{
-			thickness = 1;
-			color = cv::Scalar(0, 0, 255);
-		}
-
-		cv::Point2f pts[4];
-		rrect.points(pts);
-		for (int i = 0; i < 4; i++)
-		{
-			line(rgb, cv::Point((int)pts[i].x, (int)pts[i].y), cv::Point((int)pts[(i + 1) % 4].x, (int)pts[(i + 1) % 4].y), color, thickness);
-		}
-	}
-
-	cv::imwrite("cont.jpg", rgb);
-
-}
-
-
 
 int AutomaticPerspectiveCorrector::MeasureDistanceBetweenPoints(cv::Point a, cv::Point b)
 {
 	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
 }
+
+
+void AutomaticPerspectiveCorrector::DetectText()
+{
+	cv::Mat imageForDetection = processedImage;
+
+	imageForDetection = PreprocessImage(imageForDetection);
+
+
+	cv::findContours(imageForDetection, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+
+	
+
+	int minimumArea = 75;
+	int maximumArea = 25000;
+	
+	for (int i = 0; i < contours.size(); i++)
+	{
+		int area = cv::contourArea(contours[i]);
+		if (area >= minimumArea && area <= maximumArea)
+		{
+			cv::Rect boundRectangle = cv::boundingRect(contours[i]);
+			int height = boundRectangle.height;
+			int width = boundRectangle.width;
+			double occupyrate = area / (height*width);
+			int aspectRatio = std::max(height, width) / std::min(height, width);
+			double compactness = area / (cv::arcLength(contours[i], true) *cv::arcLength(contours[i], true));
+
+			if ((occupyrate >= 0.02) && (occupyrate <= 0.95))
+			{
+				if (aspectRatio <= 6)
+				{
+					if (compactness > 0.003 && compactness <= 0.95)
+					{
+						cv::drawContours(processedImage, contours, i, cv::Scalar(0, 255, 0), 3);
+					}
+				}
+			}
+		}
+	}
+
+	SHOW(processedImage)
+}
+
+
+
+
 
 
 
