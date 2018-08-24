@@ -1,5 +1,9 @@
 #pragma once
-#include "../ManualPerspectiveCorrector.h"
+#include <opencv2/core.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <string.h>
 
 
 class AutomaticPerspectiveCorrector
@@ -7,14 +11,13 @@ class AutomaticPerspectiveCorrector
 public:
 	AutomaticPerspectiveCorrector(cv::Mat sourceImage);
 	cv::Mat GetCorrectedImage();
-	void DetectText();
 
 private:
 	cv::Mat NormalizeImageSize(cv::Mat image);
 	cv::Mat PreprocessImage(cv::Mat image);
 	void FindLargestCountur();
 	int MeasureDistanceBetweenPoints(cv::Point a, cv::Point b);
-	void FindDocumentCorners();
+	void GetDocumentCorners();
 	void FindFourDocumentCorners(int epsilon);
 	void CorrectPerspective();
 

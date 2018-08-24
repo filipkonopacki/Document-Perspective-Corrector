@@ -24,12 +24,18 @@
     <ClCompile Include="src\AutomaticPerspectiveCorrector\AutomaticPerspectiveCorrector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\TextDetector\TextDetector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ManualPerspectiveCorrector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\AutomaticPerspectiveCorrector\AutomaticPerspectiveCorrector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextDetector\TextDetector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,14 +1,11 @@
 #include "AutomaticPerspectiveCorrector.h"
 
-#if DPC_DEBUG
-	bool debug = true;
-#else
-	bool debug = false;
-#endif
-
 
 #define LOG(x) {std::cout << x <<std::endl;}
 #define SHOW(x){cv::imshow("TEST", x);cv::waitKey(0);}
+
+
+
 
 AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector(cv::Mat sourceImage)
 	:sourceImage(sourceImage)
@@ -27,21 +24,7 @@ cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage()
 {
 	processedImage = PreprocessImage(processedImage);
 	FindLargestCountur();
-
-	if (!debug) {
-		cv::drawContours(sourceImage, contours, largestContourIndex, cv::Scalar(0, 255, 0), 3);
-		cv::imwrite("Contours.png", sourceImage);
-	}
-	
-	FindDocumentCorners();
-
-	if (!debug)
-	{
-		LOG(documentCorners)
-		cv::polylines(sourceImage, documentCorners, true, cv::Scalar(0, 255, 0), 3);
-		cv::imwrite("Contours2.png", sourceImage);
-	}
-	
+	GetDocumentCorners();
 	CorrectPerspective();
 
 	return processedImage;
@@ -70,7 +53,7 @@ void AutomaticPerspectiveCorrector::FindLargestCountur()
 	}
 }
 
-void AutomaticPerspectiveCorrector::FindDocumentCorners()
+void AutomaticPerspectiveCorrector::GetDocumentCorners()
 {
 	std::vector<cv::Point> points;
 
@@ -133,47 +116,6 @@ int AutomaticPerspectiveCorrector::MeasureDistanceBetweenPoints(cv::Point a, cv:
 }
 
 
-void AutomaticPerspectiveCorrector::DetectText()
-{
-	cv::Mat imageForDetection = processedImage;
-
-	imageForDetection = PreprocessImage(imageForDetection);
-
-
-	cv::findContours(imageForDetection, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-
-	
-
-	int minimumArea = 75;
-	int maximumArea = 25000;
-	
-	for (int i = 0; i < contours.size(); i++)
-	{
-		int area = cv::contourArea(contours[i]);
-		if (area >= minimumArea && area <= maximumArea)
-		{
-			cv::Rect boundRectangle = cv::boundingRect(contours[i]);
-			int height = boundRectangle.height;
-			int width = boundRectangle.width;
-			double occupyrate = area / (height*width);
-			int aspectRatio = std::max(height, width) / std::min(height, width);
-			double compactness = area / (cv::arcLength(contours[i], true) *cv::arcLength(contours[i], true));
-
-			if ((occupyrate >= 0.02) && (occupyrate <= 0.95))
-			{
-				if (aspectRatio <= 6)
-				{
-					if (compactness > 0.003 && compactness <= 0.95)
-					{
-						cv::drawContours(processedImage, contours, i, cv::Scalar(0, 255, 0), 3);
-					}
-				}
-			}
-		}
-	}
-
-	SHOW(processedImage)
-}
 
 
 

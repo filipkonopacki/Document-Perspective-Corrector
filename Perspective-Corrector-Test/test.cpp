@@ -12,6 +12,8 @@ int getRandomIntInRange(int min, int max)
 	return randomInt(generator);
 }
 
+
+
 TEST(InputTest, LoadInvalidImage)
 {
 	bool result = LoadImage("invalidImage.jpg",sourceImageT);

@@ -47,8 +47,6 @@ cv::Mat getCorrectedImage(cv::Mat image)
 
 	cv::warpPerspective(sourceImage, destinationImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));
 
-	//cv::resize(destinationImage, destinationImage, cv::Size(600, 800), cv::INTER_LANCZOS4);
-
 	return destinationImage;
 }
 
