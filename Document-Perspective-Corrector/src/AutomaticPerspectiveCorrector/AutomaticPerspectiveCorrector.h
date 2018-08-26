@@ -23,6 +23,8 @@ private:
 
 	cv::Mat sourceImage;
 	cv::Mat processedImage;
+	int imageWidth = 1600;
+	int imageHeight = 1800;
 	std::vector<std::vector<cv::Point>> contours;
 	std::vector<cv::Vec4i> hierarchy;
 	int largestContourIndex;

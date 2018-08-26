@@ -5,7 +5,8 @@
 
 cv::Mat sourceImage;
 std::vector<cv::Point2f> sourceCorrespondingPoints;
-
+int imageHeight = 1800;
+int imageWidth = 1200;
 
 cv::Mat getCorrectedImage(cv::Mat image)
 {
@@ -17,9 +18,9 @@ cv::Mat getCorrectedImage(cv::Mat image)
 	
 	sourceImage = NormalizeImageSize(sourceImage);
 
-	std::cout << "Your document photo will be displayed. Double click on 4 corners in order starting with upper corners.\nPress enter to continue" << std::endl;
+	std::cout << "Your document photo will be displayed. Double click on 4 corners in order.\nPress enter to continue" << std::endl;
 	std::cin.get();
-
+	std::cin.get();
 
 	cv::namedWindow("Window");
 	cv::setMouseCallback("Window", getCorrespondingPoints);
@@ -34,14 +35,50 @@ cv::Mat getCorrectedImage(cv::Mat image)
 	cv::destroyWindow("Window");
 
 
-	int destinationImageHeight = measureDistanceBetweenPoints(sourceCorrespondingPoints.at(0), sourceCorrespondingPoints.at(3));
-	int destinationImageWidth = measureDistanceBetweenPoints(sourceCorrespondingPoints.at(0), sourceCorrespondingPoints.at(1));
+	int destinationImageWidth;
+	int destinationImageHeight;
 
-	destinationCorrespondingPoints.push_back(cv::Point(0, 0));
-	destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth, 0));
-	destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
-	destinationCorrespondingPoints.push_back(cv::Point(0, destinationImageHeight - 1));
+	int firstSide = measureDistanceBetweenPoints(sourceCorrespondingPoints[0], sourceCorrespondingPoints[1]);
+	int secondSide = measureDistanceBetweenPoints(sourceCorrespondingPoints[0], sourceCorrespondingPoints[3]);
 
+	if (firstSide > secondSide)
+	{
+		destinationImageWidth = secondSide;
+		destinationImageHeight = firstSide;
+		if (sourceCorrespondingPoints[0].y < sourceCorrespondingPoints[1].y)
+		{
+			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, 0));
+			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+			destinationCorrespondingPoints.push_back(cv::Point(0, destinationImageHeight - 1));
+			destinationCorrespondingPoints.push_back(cv::Point(0, 0));
+		}
+		else
+		{
+			destinationCorrespondingPoints.push_back(cv::Point(0, destinationImageHeight - 1));
+			destinationCorrespondingPoints.push_back(cv::Point(0, 0));
+			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, 0));
+			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+		}
+	}
+	else
+	{
+		destinationImageWidth = firstSide;
+		destinationImageHeight = secondSide;
+		if (sourceCorrespondingPoints[0].y > sourceCorrespondingPoints[3].y)
+		{
+			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+			destinationCorrespondingPoints.push_back(cv::Point(0, destinationImageHeight - 1));
+			destinationCorrespondingPoints.push_back(cv::Point(0, 0));
+			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, 0));
+		}
+		else
+		{
+			destinationCorrespondingPoints.push_back(cv::Point(0, 0));
+			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, 0));
+			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+			destinationCorrespondingPoints.push_back(cv::Point(0, destinationImageHeight - 1));
+		}
+	}
 
 	homography = cv::findHomography(sourceCorrespondingPoints, destinationCorrespondingPoints);
 
@@ -52,7 +89,7 @@ cv::Mat getCorrectedImage(cv::Mat image)
 
 cv::Mat NormalizeImageSize(cv::Mat image)
 {
-	cv::resize(image, image, cv::Size(600, 800), cv::INTER_LANCZOS4);
+	cv::resize(image, image, cv::Size(imageWidth, imageHeight), cv::INTER_LANCZOS4);
 	return image;
 }
 

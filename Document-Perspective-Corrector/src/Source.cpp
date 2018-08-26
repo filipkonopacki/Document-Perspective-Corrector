@@ -1,21 +1,41 @@
 #include "ManualPerspectiveCorrector.h"
 #include "AutomaticPerspectiveCorrector/AutomaticPerspectiveCorrector.h"
-#include "TextDetector/TextDetector.h"
 #include <iostream>
 
+
+char ChooseOption()
+{
+	char option;
+	std::cin >> option;
+	if (option == 'M' || option == 'A')
+		return option;
+	
+	ChooseOption();
+}
 
 
 int main()
 {
-	//cv::Mat image = cv::imread("C:\\Users\\fkonopac\\Documents\\GitHub\\Document-Perspective-Corrector\\x64\\Debug\\Documents\\IMG_0416.jpg");
-	//cv::Mat image = cv::imread("C:\\Users\\fkonopac\\Documents\\GitHub\\Document-Perspective-Corrector\\x64\\Debug\\Documents\\cvl-database-1-1\\testset\\pages\\0052-1.tif");
-	cv::Mat image = cv::imread("C:\\Users\\fkonopac\\Documents\\GitHub\\Document-Perspective-Corrector\\Document-Perspective-Corrector\\Corrected.png");
-	cv::Mat correctedImage = image;
-	
+	cv::Mat image = cv::imread("Documents\\DSC_2830.JPG");
+	cv::Mat correctedImage;
 
-	TextDetector detector(correctedImage);
-	detector.DetectText();
+	std::cout << "~~~~~~~~~~Welcome in document perspective corrector, part of document scanner~~~~~~~~~~" << std::endl;
+	std::cout << "Choose option you want to use\nM:manual\nA:automatic" << std::endl;
 
+	char option = ChooseOption();
+	if (option == 'M')
+	{
+		std::cout << "----------Manual option----------" << std::endl;
+		correctedImage = getCorrectedImage(image);
+	}
+	else
+	{
+		std::cout << "----------Automatic option----------" << std::endl;
+		AutomaticPerspectiveCorrector corrector(image);
+		correctedImage = corrector.GetCorrectedImage();
+	}
 	
+	cv::imshow("Corrected", correctedImage);
+	cv::waitKey(0);
 }
 

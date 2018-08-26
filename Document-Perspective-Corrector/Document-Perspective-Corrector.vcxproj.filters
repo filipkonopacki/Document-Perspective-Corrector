@@ -39,4 +39,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\OpenCV_Debug_x64.props" />
+  </ItemGroup>
 </Project>

@@ -1,10 +1,8 @@
 #include "AutomaticPerspectiveCorrector.h"
 
-
+//Macros for testing purpose
 #define LOG(x) {std::cout << x <<std::endl;}
 #define SHOW(x){cv::imshow("TEST", x);cv::waitKey(0);}
-
-
 
 
 AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector(cv::Mat sourceImage)
@@ -16,7 +14,8 @@ AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector(cv::Mat sourceImage
 
 cv::Mat AutomaticPerspectiveCorrector::NormalizeImageSize(cv::Mat image)
 {
-	cv::resize(image, image, cv::Size(1200, 1600), cv::INTER_LANCZOS4);
+	cv::Size normalizeSize = cv::Size(imageWidth,imageHeight);
+	cv::resize(image, image, normalizeSize, cv::INTER_LANCZOS4);
 	return image;
 }
 
@@ -33,22 +32,21 @@ cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage()
 cv::Mat AutomaticPerspectiveCorrector::PreprocessImage(cv::Mat image)
 {
 	cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
-	image.convertTo(image, -1, 1, -40);
-	cv::threshold(image, image, 80, 255, cv::THRESH_BINARY);
+	cv::threshold(image, image, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
 	return image;
 }
 
 void AutomaticPerspectiveCorrector::FindLargestCountur()
 {
-	largestContourIndex = 1;
+	largestContourIndex = 0;
 
-	int maxImageArea = 1200 * 1600;
+	int maxImageArea = imageWidth * imageHeight;
 	int eightyPercentOfMaxArea = 80 * maxImageArea / 100;
 
 	cv::findContours(processedImage, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
-	for (int i = 2; i < contours.size(); i++)
+	for (int i = 1; i < contours.size(); i++)
 	{
-		if (cv::contourArea(contours[i]) > cv::contourArea(contours[largestContourIndex]) && cv::contourArea(contours[i]) < eightyPercentOfMaxArea)
+		if (cv::contourArea(contours[i]) < eightyPercentOfMaxArea && cv::contourArea(contours[i]) > cv::contourArea(contours[largestContourIndex]))
 			largestContourIndex = i;
 	}
 }
@@ -82,28 +80,46 @@ void AutomaticPerspectiveCorrector::CorrectPerspective()
 	int destinationImageWidth;
 	int destinationImageHeight;
 
-	int firstSide = MeasureDistanceBetweenPoints(documentCorners.at(0), documentCorners.at(1));
-	int secondSide = MeasureDistanceBetweenPoints(documentCorners.at(0), documentCorners.at(3));
+	int firstSide = MeasureDistanceBetweenPoints(documentCorners[0], documentCorners[1]);
+	int secondSide = MeasureDistanceBetweenPoints(documentCorners[0], documentCorners[3]);
 
 	if (firstSide > secondSide)
 	{
 		destinationImageWidth = secondSide;
 		destinationImageHeight = firstSide;
-
-		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
-		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
-		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
-		destinationCorners.push_back(cv::Point(0, 0));
+		if (documentCorners[0].y < documentCorners[1].y)
+		{
+			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+			destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+			destinationCorners.push_back(cv::Point(0, 0));
+		}
+		else
+		{
+			destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+			destinationCorners.push_back(cv::Point(0, 0));
+			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+		}
 	}
 	else
 	{
 		destinationImageWidth = firstSide;
 		destinationImageHeight = secondSide;
-
-		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
-		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
-		destinationCorners.push_back(cv::Point(0, 0));
-		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+		if (documentCorners[0].y > documentCorners[3].y)
+		{
+			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+			destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+			destinationCorners.push_back(cv::Point(0, 0));
+			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+		}
+		else
+		{
+			destinationCorners.push_back(cv::Point(0, 0));
+			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+			destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+		}
 	}
 
 	homography = cv::findHomography(documentCorners, destinationCorners);
