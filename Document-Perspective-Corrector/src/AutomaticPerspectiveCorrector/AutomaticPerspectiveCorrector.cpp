@@ -87,44 +87,60 @@ void AutomaticPerspectiveCorrector::CorrectPerspective()
 	{
 		destinationImageWidth = secondSide;
 		destinationImageHeight = firstSide;
-		if (documentCorners[0].y < documentCorners[1].y)
-		{
-			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
-			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
-			destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
-			destinationCorners.push_back(cv::Point(0, 0));
-		}
-		else
-		{
-			destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
-			destinationCorners.push_back(cv::Point(0, 0));
-			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
-			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
-		}
+		destinationCorners = GetCornersForUpperRightOrBottomLeftCorner(destinationImageWidth, destinationImageHeight);
 	}
 	else
 	{
 		destinationImageWidth = firstSide;
 		destinationImageHeight = secondSide;
-		if (documentCorners[0].y > documentCorners[3].y)
-		{
-			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
-			destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
-			destinationCorners.push_back(cv::Point(0, 0));
-			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
-		}
-		else
-		{
-			destinationCorners.push_back(cv::Point(0, 0));
-			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
-			destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
-			destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
-		}
+		destinationCorners = GetCornersForUpperLeftOrBottomRightCorner(firstSide, secondSide);
 	}
 
 	homography = cv::findHomography(documentCorners, destinationCorners);
 	cv::warpPerspective(sourceImage, processedImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));	
 }
+
+std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperRightOrBottomLeftCorner(int destinationImageWidth, int destinationImageHeight)
+{
+	std::vector<cv::Point> destinationCorners;
+	if (documentCorners[0].y < documentCorners[1].y)
+	{
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, 0));
+	}
+	else
+	{
+		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, 0));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+	}
+
+	return destinationCorners;
+}
+
+std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperLeftOrBottomRightCorner(int destinationImageWidth, int destinationImageHeight)
+{
+	std::vector<cv::Point> destinationCorners;
+	if (documentCorners[0].y > documentCorners[3].y)
+	{
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, 0));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+	}
+	else
+	{
+		destinationCorners.push_back(cv::Point(0, 0));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
+		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
+		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));
+	}
+	return destinationCorners;
+}
+
 
 int AutomaticPerspectiveCorrector::MeasureDistanceBetweenPoints(cv::Point a, cv::Point b)
 {

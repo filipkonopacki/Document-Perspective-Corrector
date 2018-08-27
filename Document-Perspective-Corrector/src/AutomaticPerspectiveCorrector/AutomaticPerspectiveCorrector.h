@@ -20,6 +20,8 @@ private:
 	void GetDocumentCorners();
 	void FindFourDocumentCorners(int epsilon);
 	void CorrectPerspective();
+	std::vector<cv::Point> GetCornersForUpperRightOrBottomLeftCorner(int firstSide, int secondSide);
+	std::vector<cv::Point> GetCornersForUpperLeftOrBottomRightCorner(int firstSide, int secondSide);
 
 	cv::Mat sourceImage;
 	cv::Mat processedImage;
