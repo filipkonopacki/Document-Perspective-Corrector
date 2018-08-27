@@ -5,6 +5,14 @@
 #include <opencv2/imgproc.hpp>
 #include <string.h>
 
+#include <sstream>
+#include <iostream>
+#include <fstream>
+
+void SaveToFile(std::string toSave);
+std::string toString(int a);
+
+
 class TextDetector
 {
 public:
@@ -13,12 +21,9 @@ public:
 
 
 private:
-	cv::Mat NormalizeImageSize(cv::Mat image);
-	cv::Rect AddRectangles(cv::Rect firstRect, cv::Rect secondRect, int distance);
 
 	cv::Mat sourceImage;
 	cv::Mat processedImage;
 	std::vector<std::vector<cv::Point>> contours;
 	std::vector<cv::Vec4i> hierarchy;
-	
 };

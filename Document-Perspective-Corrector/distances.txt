@@ -1,0 +1,4 @@
+-3 between 305 148 and 304 151
+-18 between 248 and 250
+-2 between 160 and 161
+-28 between 87 and 86

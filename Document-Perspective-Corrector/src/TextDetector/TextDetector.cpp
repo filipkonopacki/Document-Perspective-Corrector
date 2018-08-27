@@ -6,68 +6,61 @@
 TextDetector::TextDetector(cv::Mat image)
 	:sourceImage(image), processedImage(image)
 {
-	sourceImage = NormalizeImageSize(sourceImage);
+	
 	processedImage = sourceImage.clone();
+}
+
+
+bool Comparator(cv::Rect firstRect, cv::Rect secondRect)
+{
+	return firstRect.y < secondRect.y && firstRect.x < firstRect.x;
 }
 
 void TextDetector::DetectText()
 {
-	SHOW(sourceImage)
-	cv::cvtColor(processedImage, processedImage, cv::COLOR_BGR2GRAY);
-	
-	processedImage.convertTo(processedImage, -1, 1, -40);
-	cv::threshold(processedImage, processedImage, 80, 255, cv::THRESH_BINARY);
+	std::vector<cv::Rect> rectangles;
+	cv::Rect rectangle;
+	cv::cvtColor(processedImage, processedImage, cv::COLOR_BGR2GRAY);	
+	cv::threshold(processedImage, processedImage, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+	cv::findContours(processedImage, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_SIMPLE);
+	int maxArea = sourceImage.rows * sourceImage.cols;
+	int minRectArea = 0.005 * maxArea / 100;
+	int maxRectArea = 1.5 * maxArea / 100;
 
-	SHOW(processedImage)
-
-	cv::findContours(processedImage, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
-
-	std::vector<cv::Rect> rectangles(contours.size());
 	for (int i = 0; i < contours.size(); i++)
 	{
-		rectangles[i] = cv::boundingRect(contours[i]);
+		 rectangle = cv::boundingRect(contours[i]);
+		 if (rectangle.area() < maxRectArea && rectangle.area() > minRectArea)
+		 {
+			 rectangles.push_back(rectangle);
+		 }
 	}
 
-	int i = 0, j;
+	std::stable_sort(rectangles.begin(), rectangles.end(), Comparator);
 
-	std::vector<cv::Rect> newRect;
 
-	for (j = 0 + i; j < rectangles.size(); j++)
+	for (int i = 0; i < rectangles.size(); i++)
 	{
-		int distance = (rectangles[j].x + rectangles[j].width) - rectangles[j+1].x;
-
-		if (std::abs(distance) < 0.025)
-		{
-			newRect.push_back(AddRectangles(rectangles[j], rectangles[j + 1], distance));
-			for (i = j + 1; i < rectangles.size(); i++)
-			{
-				distance = (rectangles[i].x + rectangles[i].width) - rectangles[i + 1].x;
-				if (distance < 0.025)
-				{
-					newRect[newRect.size()-1] = AddRectangles(newRect[newRect.size()-1], rectangles[i + 1], distance);
-				}
-				break;
-			}
-			cv::rectangle(sourceImage, newRect[newRect.size()-1], cv::Scalar(0, 0, 255), 3);
-		}
+		cv::rectangle(sourceImage, rectangles[i], cv::Scalar(0, 255, 0), 3);
+		cv::putText(sourceImage, toString(i), cv::Point(rectangles[i].x, rectangles[i].y), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0,0,255));
 	}
-
 
 	SHOW(sourceImage)
 }
 
 
-cv::Mat TextDetector::NormalizeImageSize(cv::Mat image)
+
+std::string toString(int a)
 {
-	cv::resize(image, image, cv::Size(600, 800), cv::INTER_LANCZOS4);
-	return image;
+	std::stringstream ss;
+	ss << a;
+	return ss.str();
 }
 
-
-cv::Rect TextDetector::AddRectangles(cv::Rect firstRect, cv::Rect secondRect, int distance)
+void SaveToFile(std::string toSave)
 {
-	firstRect.width = firstRect.width + distance + secondRect.width;
-	firstRect.height = firstRect.height + std::abs(firstRect.height - secondRect.height);
-
-	return firstRect;
+	std::ofstream file;
+	file.open("distances.txt");
+	file << toSave;
+	file.close();
 }

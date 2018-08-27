@@ -1,5 +1,6 @@
 #include "ManualPerspectiveCorrector.h"
 #include "AutomaticPerspectiveCorrector/AutomaticPerspectiveCorrector.h"
+#include "TextDetector/TextDetector.h"
 #include <iostream>
 
 
@@ -17,38 +18,17 @@ char ChooseOption(char firstOption, char secondOption)
 
 int main()
 {
-	cv::Mat image = cv::imread("Documents\\DSC_2830.JPG");
+	cv::Mat image = cv::imread("Documents\\DSC_2851.JPG");
 	cv::Mat correctedImage;
+	AutomaticPerspectiveCorrector corrector(image);
 
-	std::cout << "~~~~~~~~~~Welcome in document perspective corrector, part of document scanner~~~~~~~~~~" << std::endl;
-	std::cout << "Choose option you want to use\nM:manual\nA:automatic" << std::endl;
-
-	char option = ChooseOption('M','A');
-	if (option == 'M')
-	{
-		std::cout << "----------Manual option----------" << std::endl;
-		correctedImage = getCorrectedImage(image);
-		std::cout << "Choose option you want to use\nS:save\nD:display" << std::endl;
-		option = ChooseOption('S', 'D');
-	}
-	else
-	{
-		std::cout << "----------Automatic option----------" << std::endl;
-		AutomaticPerspectiveCorrector corrector(image);
-		correctedImage = corrector.GetCorrectedImage();
-		std::cout << "Choose option you want to use\nS:save\nD:display" << std::endl;
-		option = ChooseOption('S', 'D');
-	}
+	correctedImage = corrector.GetCorrectedImage();
 	
-	if (option == 'S')
-	{
-		cv::imwrite("corrected.jpg", correctedImage);
-		std::cin.get();
-	}
-	else if (option == 'D')
-	{
-		cv::imshow("corrected", correctedImage);
-		cv::waitKey(0);
-	}
+	cv::imwrite("corrected.jpg", correctedImage);
+	cv::imshow("corrected", correctedImage);
+	cv::waitKey(0);
+
+	TextDetector detector(correctedImage);
+	detector.DetectText();
 }
 
