@@ -1,7 +1,45 @@
 #include "TextDetector.h"
 
+
+//----------------------------------------------------------------------------------------------------------------
 #define LOG(x) {std::cout << x <<std::endl;}
 #define SHOW(x){cv::imshow("TEST", x);cv::waitKey(0);}
+
+#include <sstream>
+#include <iostream>
+#include <fstream>
+
+std::string toString(int a)
+{
+	std::stringstream ss;
+	ss << a;
+	return ss.str();
+}
+
+void SaveToFile(std::string toSave)
+{
+	std::ofstream file;
+	file.open("distances.txt");
+	file << toSave;
+	file.close();
+}
+
+bool Comparator(cv::Rect firstRect, cv::Rect secondRect)
+{
+	if (std::abs(firstRect.y - secondRect.y) < firstRect.height)
+	{
+		return firstRect.x < secondRect.x;
+	}
+	else
+	{
+		return firstRect.y < secondRect.y;
+	}
+}
+
+
+//-----------------------------------------------------------------------------------------------------------------
+
+
 
 TextDetector::TextDetector(cv::Mat image)
 	:sourceImage(image), processedImage(image)
@@ -11,14 +49,8 @@ TextDetector::TextDetector(cv::Mat image)
 }
 
 
-bool Comparator(cv::Rect firstRect, cv::Rect secondRect)
-{
-	return firstRect.y < secondRect.y && firstRect.x < firstRect.x;
-}
-
 void TextDetector::DetectText()
 {
-	std::vector<cv::Rect> rectangles;
 	cv::Rect rectangle;
 	cv::cvtColor(processedImage, processedImage, cv::COLOR_BGR2GRAY);	
 	cv::threshold(processedImage, processedImage, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
@@ -36,12 +68,11 @@ void TextDetector::DetectText()
 		 }
 	}
 
-	std::stable_sort(rectangles.begin(), rectangles.end(), Comparator);
 
-
+	QuickSortRectangles(0, rectangles.size() - 1);
 	for (int i = 0; i < rectangles.size(); i++)
 	{
-		cv::rectangle(sourceImage, rectangles[i], cv::Scalar(0, 255, 0), 3);
+		cv::rectangle(sourceImage, rectangles[i], cv::Scalar(0, 255, 0), 1);
 		cv::putText(sourceImage, toString(i), cv::Point(rectangles[i].x, rectangles[i].y), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0,0,255));
 	}
 
@@ -49,18 +80,45 @@ void TextDetector::DetectText()
 }
 
 
-
-std::string toString(int a)
+void TextDetector::QuickSortRectangles(unsigned int leftSide, unsigned int rightSide)
 {
-	std::stringstream ss;
-	ss << a;
-	return ss.str();
-}
+	if (rightSide <= leftSide)
+		return;
 
-void SaveToFile(std::string toSave)
-{
-	std::ofstream file;
-	file.open("distances.txt");
-	file << toSave;
-	file.close();
+	int i = leftSide -1;
+	int j = rightSide +1;
+
+	int middleIndex = (leftSide + rightSide) / 2;
+
+	int pivot = rectangles[middleIndex].y;
+
+	while (true)
+	{	
+		while (pivot > rectangles[++i].y);
+		while (pivot < rectangles[--j].y);
+		
+
+		if (i <= j)
+		{
+			if (std::abs(rectangles[i].y - rectangles[j].y) <= rectangles[i].height)
+			{
+				if(rectangles[i].x > rectangles[j].x)
+					std::swap(rectangles[i], rectangles[j]);
+			}
+			std::swap(rectangles[i], rectangles[j]);
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	if (j > leftSide)
+	{
+		QuickSortRectangles(leftSide, j);
+	}
+	if (i < rightSide) 
+	{
+		QuickSortRectangles(i, rightSide);
+	}
 }
