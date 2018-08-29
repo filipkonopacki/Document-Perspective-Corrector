@@ -15,11 +15,16 @@ public:
 
 
 private:
-	void QuickSortRectangles(unsigned int leftSide, unsigned int rightSide);
+	void QuickSortRectangles(int leftSide, int rightSide);
+
+	void UpdateRectanglesState(int firstSideSwapIndex, int secondSideSwapIndex, int pivot);
 
 	cv::Mat sourceImage;
 	cv::Mat processedImage;
 	std::vector<std::vector<cv::Point>> contours;
 	std::vector<cv::Vec4i> hierarchy;
 	std::vector<cv::Rect> rectangles;
+
+
+	std::vector<std::string> rectanglesSwapRegister;
 };

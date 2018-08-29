@@ -29,6 +29,7 @@ int main()
 	cv::waitKey(0);
 
 	TextDetector detector(correctedImage);
+
 	detector.DetectText();
 }
 

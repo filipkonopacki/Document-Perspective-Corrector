@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 
+
 std::string toString(int a)
 {
 	std::stringstream ss;
@@ -16,11 +17,15 @@ std::string toString(int a)
 	return ss.str();
 }
 
-void SaveToFile(std::string toSave)
+void SaveToFile(std::vector<std::string> toSave)
 {
 	std::ofstream file;
-	file.open("distances.txt");
-	file << toSave;
+	file.open("swapRegister.txt");
+
+	for (std::string line : toSave)
+	{
+		file << line << "\n"; 
+	}
 	file.close();
 }
 
@@ -36,6 +41,34 @@ bool Comparator(cv::Rect firstRect, cv::Rect secondRect)
 	}
 }
 
+
+
+
+
+void TextDetector::UpdateRectanglesState(int leftSideSwapIndex, int rightSideSwapIndex, int pivot)
+{
+	if (leftSideSwapIndex == -1)
+		rectanglesSwapRegister = std::vector<std::string>(rectangles.size());
+	
+	for (int i = 0; i < rectanglesSwapRegister.size(); i++)
+	{
+		if (leftSideSwapIndex == -1)
+			rectanglesSwapRegister[i] = toString(i) + "\t(" + toString(rectangles[i].x) + "," + toString(rectangles[i].y) + ")";
+
+		else
+		{
+			if(rectangles[i].y == pivot)
+				rectanglesSwapRegister[i].append("[P]");
+			if(i == leftSideSwapIndex)
+				rectanglesSwapRegister[i].append("*");
+			rectanglesSwapRegister[i].append("\t");
+			if(i == rightSideSwapIndex)
+				rectanglesSwapRegister[i].append("*");
+			
+			rectanglesSwapRegister[i].append(toString(i) + "(" + toString(rectangles[i].x) + "," + toString(rectangles[i].y) + ")");
+		}
+	}
+}
 
 //-----------------------------------------------------------------------------------------------------------------
 
@@ -69,7 +102,29 @@ void TextDetector::DetectText()
 	}
 
 
-	QuickSortRectangles(0, rectangles.size() - 1);
+	//-------------------------------------------------------------------------------------------------------------------------
+	std::vector<cv::Rect> tmp;
+	for (int i = 0; i < 10; i++)
+	{
+		tmp.push_back(rectangles[i+20]);
+		tmp.push_back(rectangles[rectangles.size() - 1 - i]);
+	}
+	rectangles = tmp;
+
+	cv::Mat tmpImage = sourceImage.clone();
+	for (int i = 0; i < rectangles.size(); i++)
+	{
+		cv::rectangle(tmpImage, rectangles[i], cv::Scalar(0, 255, 0), 1);
+		cv::putText(tmpImage, toString(i), cv::Point(rectangles[i].x, rectangles[i].y), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 255));
+	}
+	cv::imwrite("unsorted.jpg", tmpImage);
+
+	UpdateRectanglesState(-1, -1, 0);
+
+	QuickSortRectangles(0, rectangles.size()-1);
+
+	SaveToFile(rectanglesSwapRegister);
+
 	for (int i = 0; i < rectangles.size(); i++)
 	{
 		cv::rectangle(sourceImage, rectangles[i], cv::Scalar(0, 255, 0), 1);
@@ -80,45 +135,60 @@ void TextDetector::DetectText()
 }
 
 
-void TextDetector::QuickSortRectangles(unsigned int leftSide, unsigned int rightSide)
+void TextDetector::QuickSortRectangles(int leftSide, int rightSide)
 {
 	if (rightSide <= leftSide)
 		return;
 
 	int i = leftSide -1;
-	int j = rightSide +1;
-
+	int j = rightSide;
 	int middleIndex = (leftSide + rightSide) / 2;
+
 
 	int pivot = rectangles[middleIndex].y;
 
 	while (true)
 	{	
-		while (pivot > rectangles[++i].y);
-		while (pivot < rectangles[--j].y);
+		while (pivot >= rectangles[++i].y);
+		while (pivot <= rectangles[j].y) 
+		{
+			if (j > 0)
+				j--;
+			else
+				break;
+		}
 		
 
 		if (i <= j)
 		{
 			if (std::abs(rectangles[i].y - rectangles[j].y) <= rectangles[i].height)
 			{
-				if(rectangles[i].x > rectangles[j].x)
+				if (rectangles[i].x > rectangles[j].x)
+				{
 					std::swap(rectangles[i], rectangles[j]);
+					UpdateRectanglesState(i, j, pivot);
+				}
 			}
-			std::swap(rectangles[i], rectangles[j]);
+			else
+			{
+				std::swap(rectangles[i], rectangles[j]);
+				UpdateRectanglesState(i, j, pivot);
+			}
 		}
 		else
 		{
 			break;
 		}
+		if(j==0)
+			break;
 	}
 
-	if (j > leftSide)
-	{
+
+	if (j == 0)
+		return;
+
+	else if (j > leftSide)
 		QuickSortRectangles(leftSide, j);
-	}
-	if (i < rightSide) 
-	{
+	else if (i < rightSide) 
 		QuickSortRectangles(i, rightSide);
-	}
 }
