@@ -29,21 +29,6 @@ void SaveToFile(std::vector<std::string> toSave)
 	file.close();
 }
 
-bool Comparator(cv::Rect firstRect, cv::Rect secondRect)
-{
-	if (std::abs(firstRect.y - secondRect.y) < firstRect.height)
-	{
-		return firstRect.x < secondRect.x;
-	}
-	else
-	{
-		return firstRect.y < secondRect.y;
-	}
-}
-
-
-
-
 
 void TextDetector::UpdateRectanglesState(int leftSideSwapIndex, int rightSideSwapIndex, int pivot)
 {
@@ -144,7 +129,7 @@ void TextDetector::QuickSortRectangles(int leftSide, int rightSide)
 	int j = rightSide;
 	int middleIndex = (leftSide + rightSide) / 2;
 
-
+	
 	int pivot = rectangles[middleIndex].y;
 
 	while (true)
