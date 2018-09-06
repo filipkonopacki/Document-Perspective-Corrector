@@ -15,7 +15,7 @@ public:
 
 
 private:
-	void QuickSortRectangles(int leftSide, int rightSide);
+	void SortRectangles();
 
 	void UpdateRectanglesState(int firstSideSwapIndex, int secondSideSwapIndex, int pivot);
 

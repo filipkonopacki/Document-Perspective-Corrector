@@ -86,94 +86,32 @@ void TextDetector::DetectText()
 		 }
 	}
 
-
-	//-------------------------------------------------------------------------------------------------------------------------
-	std::vector<cv::Rect> tmp;
-	for (int i = 0; i < 10; i++)
-	{
-		tmp.push_back(rectangles[i+20]);
-		tmp.push_back(rectangles[rectangles.size() - 1 - i]);
-	}
-	rectangles = tmp;
-
-	cv::Mat tmpImage = sourceImage.clone();
-	for (int i = 0; i < rectangles.size(); i++)
-	{
-		cv::rectangle(tmpImage, rectangles[i], cv::Scalar(0, 255, 0), 1);
-		cv::putText(tmpImage, toString(i), cv::Point(rectangles[i].x, rectangles[i].y), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 255));
-	}
-	cv::imwrite("unsorted.jpg", tmpImage);
-
-	UpdateRectanglesState(-1, -1, 0);
-
-	QuickSortRectangles(0, rectangles.size()-1);
-
-	SaveToFile(rectanglesSwapRegister);
+	SortRectangles();
 
 	for (int i = 0; i < rectangles.size(); i++)
 	{
 		cv::rectangle(sourceImage, rectangles[i], cv::Scalar(0, 255, 0), 1);
-		cv::putText(sourceImage, toString(i), cv::Point(rectangles[i].x, rectangles[i].y), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0,0,255));
+		cv::putText(sourceImage, toString(i), cv::Point(rectangles[i].x, rectangles[i].y), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 255));
 	}
 
 	SHOW(sourceImage)
 }
 
-
-void TextDetector::QuickSortRectangles(int leftSide, int rightSide)
+void TextDetector::SortRectangles()
 {
-	if (rightSide <= leftSide)
-		return;
-
-	int i = leftSide -1;
-	int j = rightSide;
-	int middleIndex = (leftSide + rightSide) / 2;
-
-	
-	int pivot = rectangles[middleIndex].y;
-
-	while (true)
-	{	
-		while (pivot >= rectangles[++i].y);
-		while (pivot <= rectangles[j].y) 
+	for (int i = 0; i < rectangles.size(); i++)
+	{
+		for (int j = 0; j < rectangles.size()-1; j++)
 		{
-			if (j > 0)
-				j--;
-			else
-				break;
-		}
-		
-
-		if (i <= j)
-		{
-			if (std::abs(rectangles[i].y - rectangles[j].y) <= rectangles[i].height)
+			if (std::abs(rectangles[j].y - rectangles[i].y) <= rectangles[j].height)
 			{
-				if (rectangles[i].x > rectangles[j].x)
-				{
-					std::swap(rectangles[i], rectangles[j]);
-					UpdateRectanglesState(i, j, pivot);
-				}
+				if (rectangles[j].x > rectangles[i].x)
+					std::swap(rectangles[j], rectangles[i]);
 			}
-			else
+			else if (rectangles[j].y > rectangles[i].y)
 			{
-				std::swap(rectangles[i], rectangles[j]);
-				UpdateRectanglesState(i, j, pivot);
+				std::swap(rectangles[j], rectangles[i]);
 			}
 		}
-		else
-		{
-			break;
-		}
-		if(j==0)
-			break;
 	}
-
-
-	if (j == 0)
-		return;
-
-	else if (j > leftSide)
-		QuickSortRectangles(leftSide, j);
-	else if (i < rightSide) 
-		QuickSortRectangles(i, rightSide);
 }
