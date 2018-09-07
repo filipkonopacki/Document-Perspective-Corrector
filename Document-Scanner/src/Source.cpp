@@ -1,4 +1,4 @@
-#include "ManualPerspectiveCorrector.h"
+#include "ManualPerspectiveCorrector/ManualPerspectiveCorrector.h"
 #include "AutomaticPerspectiveCorrector/AutomaticPerspectiveCorrector.h"
 #include "TextDetector/TextDetector.h"
 #include <iostream>

@@ -62,7 +62,6 @@ void TextDetector::UpdateRectanglesState(int leftSideSwapIndex, int rightSideSwa
 TextDetector::TextDetector(cv::Mat image)
 	:sourceImage(image), processedImage(image)
 {
-	
 	processedImage = sourceImage.clone();
 }
 
@@ -86,16 +85,20 @@ void TextDetector::DetectText()
 		 }
 	}
 
-	SortRectangles();
+	//SortRectangles();
 
 	for (int i = 0; i < rectangles.size(); i++)
 	{
 		cv::rectangle(sourceImage, rectangles[i], cv::Scalar(0, 255, 0), 1);
-		cv::putText(sourceImage, toString(i), cv::Point(rectangles[i].x, rectangles[i].y), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 255));
+		cv::putText(sourceImage, toString(i), cv::Point(rectangles[i].x, rectangles[i].y), cv::FONT_HERSHEY_COMPLEX, 0.3, cv::Scalar(0, 0, 255));
 	}
 
+	cv::imwrite("labeled.jpg", sourceImage);
 	SHOW(sourceImage)
 }
+
+
+
 
 void TextDetector::SortRectangles()
 {

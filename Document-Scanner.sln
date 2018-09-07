@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Document-Perspective-Corrector", "Document-Perspective-Corrector\Document-Perspective-Corrector.vcxproj", "{89FB9F20-DE18-4CA5-8908-1C510081C72B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Document-Scanner", "Document-Perspective-Corrector\Document-Perspective-Corrector.vcxproj", "{89FB9F20-DE18-4CA5-8908-1C510081C72B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Perspective-Corrector-Test", "Perspective-Corrector-Test\Perspective-Corrector-Test.vcxproj", "{676123E8-853E-41EF-A7E6-B3C4E81CB518}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DocumentScannerGUI", "DocumentScannerGUI\DocumentScannerGUI.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,18 +29,16 @@ Global
 		{89FB9F20-DE18-4CA5-8908-1C510081C72B}.Test|x64.Build.0 = Test|x64
 		{89FB9F20-DE18-4CA5-8908-1C510081C72B}.Test|x86.ActiveCfg = Test|Win32
 		{89FB9F20-DE18-4CA5-8908-1C510081C72B}.Test|x86.Build.0 = Test|Win32
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Debug|x64.ActiveCfg = Debug|x64
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Debug|x64.Build.0 = Debug|x64
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Debug|x86.ActiveCfg = Debug|Win32
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Debug|x86.Build.0 = Debug|Win32
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Release|x64.ActiveCfg = Release|x64
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Release|x64.Build.0 = Release|x64
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Release|x86.ActiveCfg = Release|Win32
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Release|x86.Build.0 = Release|Win32
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Test|x64.ActiveCfg = Test|x64
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Test|x64.Build.0 = Test|x64
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Test|x86.ActiveCfg = Test|Win32
-		{676123E8-853E-41EF-A7E6-B3C4E81CB518}.Test|x86.Build.0 = Test|Win32
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.ActiveCfg = Debug|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x64.Build.0 = Debug|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Debug|x86.ActiveCfg = Debug|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x64.Build.0 = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Release|x86.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Test|x64.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Test|x64.Build.0 = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Test|x86.ActiveCfg = Release|x64
+		{B12702AD-ABFB-343A-A199-8E24837244A3}.Test|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

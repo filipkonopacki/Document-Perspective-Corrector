@@ -18,24 +18,54 @@
     <ClCompile Include="src\Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ManualPerspectiveCorrector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\AutomaticPerspectiveCorrector\AutomaticPerspectiveCorrector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\TextDetector\TextDetector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ManualPerspectiveCorrector\ManualPerspectiveCorrector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextDetector\TextParts\Letter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextDetector\TextParts\Line.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextDetector\TextParts\Page.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextDetector\TextParts\Word.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DocumentScanner\DocumentScanner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ManualPerspectiveCorrector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\AutomaticPerspectiveCorrector\AutomaticPerspectiveCorrector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\TextDetector\TextDetector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ManualPerspectiveCorrector\ManualPerspectiveCorrector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextDetector\TextParts\Letter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextDetector\TextParts\Line.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextDetector\TextParts\Page.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextDetector\TextParts\Word.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DocumentScanner\DocumentScanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

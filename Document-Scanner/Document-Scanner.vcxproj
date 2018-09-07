@@ -31,6 +31,7 @@
     <ProjectGuid>{89FB9F20-DE18-4CA5-8908-1C510081C72B}</ProjectGuid>
     <RootNamespace>DocumentPerspectiveCorrector</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <ProjectName>Document-Scanner</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -132,15 +133,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\DocumentScanner\DocumentScanner.cpp" />
+    <ClCompile Include="src\TextDetector\TextParts\Page.cpp" />
+    <ClCompile Include="src\TextDetector\TextParts\Line.cpp" />
+    <ClCompile Include="src\TextDetector\TextParts\Letter.cpp" />
     <ClCompile Include="src\AutomaticPerspectiveCorrector\AutomaticPerspectiveCorrector.cpp" />
-    <ClCompile Include="src\ManualPerspectiveCorrector.cpp" />
+    <ClCompile Include="src\ManualPerspectiveCorrector\ManualPerspectiveCorrector.cpp" />
     <ClCompile Include="src\Source.cpp" />
     <ClCompile Include="src\TextDetector\TextDetector.cpp" />
+    <ClCompile Include="src\TextDetector\TextParts\Word.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\DocumentScanner\DocumentScanner.h" />
+    <ClInclude Include="src\TextDetector\TextParts\Page.h" />
+    <ClInclude Include="src\TextDetector\TextParts\Line.h" />
+    <ClInclude Include="src\TextDetector\TextParts\Letter.h" />
     <ClInclude Include="src\AutomaticPerspectiveCorrector\AutomaticPerspectiveCorrector.h" />
-    <ClInclude Include="src\ManualPerspectiveCorrector.h" />
+    <ClInclude Include="src\ManualPerspectiveCorrector\ManualPerspectiveCorrector.h" />
     <ClInclude Include="src\TextDetector\TextDetector.h" />
+    <ClInclude Include="src\TextDetector\TextParts\Word.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\OpenCV_Debug_x64.props" />

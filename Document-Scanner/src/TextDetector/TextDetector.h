@@ -16,6 +16,7 @@ public:
 
 private:
 	void SortRectangles();
+	
 
 	void UpdateRectanglesState(int firstSideSwapIndex, int secondSideSwapIndex, int pivot);
 
@@ -24,6 +25,8 @@ private:
 	std::vector<std::vector<cv::Point>> contours;
 	std::vector<cv::Vec4i> hierarchy;
 	std::vector<cv::Rect> rectangles;
+
+	
 
 
 	std::vector<std::string> rectanglesSwapRegister;
