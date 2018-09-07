@@ -7,7 +7,7 @@
 
 
 
-bool LoadImage(std::string fileName, cv::Mat &sourceImage);
+
 cv::Mat getCorrectedImage(cv::Mat sourceImage);
 cv::Mat NormalizeImageSize(cv::Mat sourceImage);
 void getCorrespondingPoints(int action, int x, int y, int flags, void *userdata);

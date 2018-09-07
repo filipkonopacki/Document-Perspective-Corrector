@@ -2,7 +2,9 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_DocumentScannerGUI.h"
-#include "../Document Scanner/src/D"
+#include "QFileDialog"
+#include "QMessageBox"
+#include "../Document-Scanner/src/DocumentScanner/DocumentScanner.h"
 
 class DocumentScannerGUI : public QMainWindow
 {
@@ -13,4 +15,9 @@ public:
 
 private:
 	Ui::DocumentScannerGUIClass ui;
+	DocumentScanner scanner;
+
+
+private slots:
+	void on_LoadButton_clicked();
 };
