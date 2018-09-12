@@ -1,7 +1,7 @@
 #include "DetectionWindow.h"
 
-DetectionWindow::DetectionWindow(QWidget *parent)
-	: QWidget(parent)
+DetectionWindow::DetectionWindow(const QString &title, QWidget *parent)
+	: QDialog(parent)
 {
 	ui.setupUi(this);
 }

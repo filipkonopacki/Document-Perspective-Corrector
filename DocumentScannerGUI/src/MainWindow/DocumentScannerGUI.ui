@@ -6,39 +6,46 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>301</width>
+    <height>303</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>DocumentScannerGUI</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="LoadButton">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>270</y>
-      <width>75</width>
-      <height>23</height>
+      <x>10</x>
+      <y>160</y>
+      <width>281</width>
+      <height>83</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Load</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="CloseButton">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>300</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Close</string>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="LoadButton">
+       <property name="text">
+        <string>Load</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="DetectButton">
+       <property name="text">
+        <string>Detect Text</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="CloseButton">
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -46,7 +53,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>301</width>
      <height>21</height>
     </rect>
    </property>
@@ -56,7 +63,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>false</bool>
+    <bool>true</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

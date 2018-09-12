@@ -1,14 +1,14 @@
 #pragma once
 
-#include <QWidget>
+#include <QDialog>
 #include "ui_DetectionWindow.h"
 
-class DetectionWindow : public QWidget
+class DetectionWindow : public QDialog
 {
 	Q_OBJECT
 
 public:
-	DetectionWindow(QWidget *parent = Q_NULLPTR);
+	DetectionWindow(const QString &title, QWidget *parent);
 	~DetectionWindow();
 
 private:

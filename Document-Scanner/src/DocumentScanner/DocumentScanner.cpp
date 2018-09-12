@@ -14,6 +14,9 @@ DocumentScanner::~DocumentScanner()
 
 void DocumentScanner::LoadPages(std::vector<std::string> fileNames)
 {
+	if (sourceImages.size() != 0)
+		sourceImages.clear();
+
 	for (std::string fileName : fileNames)
 	{
 		LoadImage(fileName);

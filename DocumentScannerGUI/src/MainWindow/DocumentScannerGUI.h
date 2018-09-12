@@ -17,9 +17,11 @@ public:
 
 private:
 	Ui::DocumentScannerGUIClass ui;
+	DocumentScanner scanner;
 	
 
 
 private slots:
 	void on_LoadButton_clicked();
+	void openDetectionWindow();
 };

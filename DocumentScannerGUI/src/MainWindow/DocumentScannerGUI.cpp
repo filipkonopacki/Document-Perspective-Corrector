@@ -9,9 +9,7 @@ DocumentScannerGUI::DocumentScannerGUI(QWidget *parent)
 
 void DocumentScannerGUI::on_LoadButton_clicked()
 {
-	DocumentScanner scanner;
-
-	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Open files");
+	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Open files","",tr("Images (*.png *.jpg *.jpeg *.bmp *.gif)"));
 	std::vector<std::string> filePaths;
 
 	for (QString fileName : fileNames)
@@ -20,13 +18,22 @@ void DocumentScannerGUI::on_LoadButton_clicked()
 	}
 
 	scanner.LoadPages(filePaths);
-	if (!scanner.AreEmpty())
+	if (!scanner.AreEmpty() || filePaths.size() == 0)
 	{
-		QMessageBox::warning(this, "Loading failed", "At least one of your files can not be open! Check file format.");
+		QMessageBox::critical(this, "Loading failed", "At least one of your files can not be open!");
 		return;
 	}
 
 	QMessageBox::information(this, "Loading finished", "Your image(s) has been loaded!");
-	
+	openDetectionWindow();
+}
 
+
+void DocumentScannerGUI::openDetectionWindow()
+{
+	DetectionWindow win("Detection Window",this);
+	win.setModal(true);
+	win.exec();
+
+	
 }

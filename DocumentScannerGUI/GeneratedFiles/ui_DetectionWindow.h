@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -19,19 +18,14 @@ QT_BEGIN_NAMESPACE
 class Ui_DetectionWindow
 {
 public:
-    QPushButton *CloseButton;
 
     void setupUi(QWidget *DetectionWindow)
     {
         if (DetectionWindow->objectName().isEmpty())
             DetectionWindow->setObjectName(QStringLiteral("DetectionWindow"));
-        DetectionWindow->resize(400, 300);
-        CloseButton = new QPushButton(DetectionWindow);
-        CloseButton->setObjectName(QStringLiteral("CloseButton"));
-        CloseButton->setGeometry(QRect(290, 240, 75, 23));
+        DetectionWindow->resize(546, 341);
 
         retranslateUi(DetectionWindow);
-        QObject::connect(CloseButton, SIGNAL(clicked()), DetectionWindow, SLOT(close()));
 
         QMetaObject::connectSlotsByName(DetectionWindow);
     } // setupUi
@@ -39,7 +33,6 @@ public:
     void retranslateUi(QWidget *DetectionWindow)
     {
         DetectionWindow->setWindowTitle(QApplication::translate("DetectionWindow", "DetectionWindow", nullptr));
-        CloseButton->setText(QApplication::translate("DetectionWindow", "Close", nullptr));
     } // retranslateUi
 
 };
