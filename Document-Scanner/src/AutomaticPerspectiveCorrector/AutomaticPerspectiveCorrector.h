@@ -30,5 +30,5 @@ private:
 	std::vector<std::vector<cv::Point>> contours;
 	std::vector<cv::Vec4i> hierarchy;
 	int largestContourIndex;
-	std::vector<cv::Point> documentCorners;	
+	std::vector<cv::Point> documentCorners;
 };

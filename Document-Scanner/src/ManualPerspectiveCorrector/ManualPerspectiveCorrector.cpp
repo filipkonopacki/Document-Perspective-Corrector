@@ -15,7 +15,7 @@ cv::Mat getCorrectedImage(cv::Mat image)
 	cv::Mat homography;
 	cv::Mat destinationImage;
 	std::vector<cv::Point2f> destinationCorrespondingPoints;
-	
+
 	sourceImage = NormalizeImageSize(sourceImage);
 
 	std::cout << "Your document photo will be displayed. Double click on 4 corners in order.\nPress enter to continue" << std::endl;

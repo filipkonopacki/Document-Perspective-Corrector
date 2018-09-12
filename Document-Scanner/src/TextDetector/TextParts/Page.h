@@ -14,10 +14,10 @@ public:
 	~Page();
 
 
+
 private:
 	cv::Mat page;
-	AutomaticPerspectiveCorrector autoDetector;
-	
+
 	std::vector<Line> lines;
 };
 

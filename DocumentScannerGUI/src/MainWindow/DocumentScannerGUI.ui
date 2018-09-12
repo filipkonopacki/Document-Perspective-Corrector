@@ -6,32 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>415</width>
-    <height>312</height>
+    <width>600</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>DocumentScannerGUI</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="CloseButton">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>220</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Close</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="LoadButton">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>118</y>
+      <x>480</x>
+      <y>270</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -40,13 +27,26 @@
      <string>Load</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="CloseButton">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>300</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Close</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>415</width>
+     <width>600</width>
      <height>21</height>
     </rect>
    </property>
@@ -56,7 +56,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -73,12 +73,12 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1034</x>
-     <y>605</y>
+     <x>494</x>
+     <y>351</y>
     </hint>
     <hint type="destinationlabel">
-     <x>971</x>
-     <y>597</y>
+     <x>438</x>
+     <y>345</y>
     </hint>
    </hints>
   </connection>

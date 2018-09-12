@@ -36,3 +36,11 @@ void DocumentScanner::UpdatePages()
 	}
 }
 
+bool DocumentScanner::AreEmpty()
+{
+	for (cv::Mat image : sourceImages)
+		if (image.empty())
+			return false;
+	
+	return true;
+}

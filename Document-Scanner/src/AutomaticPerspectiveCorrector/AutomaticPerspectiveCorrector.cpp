@@ -14,7 +14,7 @@ AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector(cv::Mat sourceImage
 
 cv::Mat AutomaticPerspectiveCorrector::NormalizeImageSize(cv::Mat image)
 {
-	cv::Size normalizeSize = cv::Size(imageWidth,imageHeight);
+	cv::Size normalizeSize = cv::Size(imageWidth, imageHeight);
 	cv::resize(image, image, normalizeSize, cv::INTER_LANCZOS4);
 	return image;
 }
@@ -59,7 +59,7 @@ void AutomaticPerspectiveCorrector::GetDocumentCorners()
 	{
 		points.push_back(contours[largestContourIndex][j]);
 	}
-	
+
 	cv::convexHull(points, documentCorners);
 	FindFourDocumentCorners(0);
 }
@@ -97,7 +97,7 @@ void AutomaticPerspectiveCorrector::CorrectPerspective()
 	}
 
 	homography = cv::findHomography(documentCorners, destinationCorners);
-	cv::warpPerspective(sourceImage, processedImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));	
+	cv::warpPerspective(sourceImage, processedImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));
 }
 
 std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperRightOrBottomLeftCorner(int destinationImageWidth, int destinationImageHeight)
@@ -146,12 +146,3 @@ int AutomaticPerspectiveCorrector::MeasureDistanceBetweenPoints(cv::Point a, cv:
 {
 	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
 }
-
-
-
-
-
-
-
-
-

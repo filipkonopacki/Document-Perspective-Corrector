@@ -1,10 +1,12 @@
 #pragma once
-
 #include <QtWidgets/QMainWindow>
 #include "ui_DocumentScannerGUI.h"
 #include "QFileDialog"
 #include "QMessageBox"
-#include "../Document-Scanner/src/DocumentScanner/DocumentScanner.h"
+#include "../../Document-Scanner/Document-Scanner/src/DocumentScanner/DocumentScanner.h"
+#include "../AdditionalWindows/DetectionWindow.h"
+
+
 
 class DocumentScannerGUI : public QMainWindow
 {
@@ -15,7 +17,7 @@ public:
 
 private:
 	Ui::DocumentScannerGUIClass ui;
-	DocumentScanner scanner;
+	
 
 
 private slots:

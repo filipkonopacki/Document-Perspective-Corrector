@@ -1,13 +1,17 @@
 #pragma once
+
+#include <vector>
+#include <string>
+
 #include "opencv2/core.hpp"
 #include "opencv2/opencv.hpp"
 #include "../TextDetector/TextParts/Page.h"
 
 
-#include <vector>
-#include <string>
 
-enum DetectionMode{AUTO, MANUAL, ALL_AUTO, ALL_MANUAL};
+
+
+enum DetectionMode { AUTO, MANUAL, ALL_AUTO, ALL_MANUAL };
 
 
 class DocumentScanner
@@ -16,8 +20,9 @@ public:
 	DocumentScanner();
 	~DocumentScanner();
 	void LoadPages(std::vector<std::string> fileNames);
-	
-	
+	bool AreEmpty();
+
+
 
 
 private:
@@ -27,6 +32,5 @@ private:
 
 	std::vector<cv::Mat> sourceImages;
 	std::vector<Page> pages;
-	int currentPageIndex = 0;
 };
 

@@ -33,22 +33,31 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DocumentScannerGUI.cpp">
+    <ClCompile Include="src\MainWindow\DocumentScannerGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AdditionalWindows\DetectionWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="DocumentScannerGUI.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="DocumentScannerGUI.ui">
+    <QtUic Include="src\MainWindow\DocumentScannerGUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="src\AdditionalWindows\DetectionWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="DocumentScannerGUI.qrc">
+    <QtMoc Include="src\MainWindow\DocumentScannerGUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\AdditionalWindows\DetectionWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="src\MainWindow\DocumentScannerGUI.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
