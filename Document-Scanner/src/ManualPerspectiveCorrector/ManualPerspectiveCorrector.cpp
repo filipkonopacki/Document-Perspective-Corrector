@@ -5,8 +5,8 @@
 
 cv::Mat sourceImage;
 std::vector<cv::Point2f> sourceCorrespondingPoints;
-int imageHeight = 1800;
-int imageWidth = 1200;
+int imageHeight = 800;
+int imageWidth = 600;
 
 cv::Mat getCorrectedImage(cv::Mat image)
 {

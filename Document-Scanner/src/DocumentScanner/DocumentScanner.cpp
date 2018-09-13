@@ -18,25 +18,13 @@ void DocumentScanner::LoadPages(std::vector<std::string> fileNames)
 		sourceImages.clear();
 
 	for (std::string fileName : fileNames)
-	{
 		LoadImage(fileName);
-	}
-
-	UpdatePages();
 }
 
 void DocumentScanner::LoadImage(std::string fileName)
 {
 	cv::Mat image = cv::imread(fileName);
 	sourceImages.push_back(image);
-}
-
-void DocumentScanner::UpdatePages()
-{
-	for (cv::Mat image : sourceImages)
-	{
-		pages.push_back(Page(image));
-	}
 }
 
 bool DocumentScanner::AreEmpty()
@@ -46,4 +34,43 @@ bool DocumentScanner::AreEmpty()
 			return false;
 	
 	return true;
+}
+
+cv::Mat DocumentScanner::GetSourceImageAt(int index)
+{
+	return sourceImages.at(index);
+}
+
+int DocumentScanner::GetNumberOfPages()
+{
+	return pages.size();
+}
+
+std::vector<cv::Mat> DocumentScanner::CorrectImagePerspective(int index, DetectionMode mode)
+{
+	AutomaticPerspectiveCorrector corrector;
+	std::vector<cv::Mat> result;
+	switch (mode)
+	{
+		case AUTO:
+			result.push_back(corrector.GetCorrectedImage(sourceImages[index]));
+			break;
+		case ALL_AUTO:
+			for (int i = index; i < sourceImages.size(); i++)
+			{
+				result.push_back(corrector.GetCorrectedImage(sourceImages[i]));
+			}
+			break;
+		case MANUAL:
+			result.push_back(getCorrectedImage(sourceImages[index]));
+			break;
+		case ALL_MANUAL:
+			for (int i = index; i < sourceImages.size(); i++)
+			{
+				result.push_back(getCorrectedImage(sourceImages[i]));
+			}
+			break;
+	}
+
+	return result;
 }

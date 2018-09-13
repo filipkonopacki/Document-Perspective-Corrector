@@ -9,12 +9,12 @@
 class AutomaticPerspectiveCorrector
 {
 public:
-	AutomaticPerspectiveCorrector(cv::Mat sourceImage);
-	cv::Mat GetCorrectedImage();
+	AutomaticPerspectiveCorrector();
+	cv::Mat GetCorrectedImage(cv::Mat sourceImage);
 
 private:
-	cv::Mat NormalizeImageSize(cv::Mat image);
-	cv::Mat PreprocessImage(cv::Mat image);
+	void NormalizeImageSize(cv::Mat &image);
+	void PreprocessImage(cv::Mat &image);
 	void FindLargestCountur();
 	int MeasureDistanceBetweenPoints(cv::Point a, cv::Point b);
 	void GetDocumentCorners();

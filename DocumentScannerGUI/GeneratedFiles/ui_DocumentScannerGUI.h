@@ -16,6 +16,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -24,7 +25,10 @@ class Ui_DocumentScannerGUIClass
 {
 public:
     QWidget *centralWidget;
+    QWidget *layoutWidget;
+    QVBoxLayout *verticalLayout;
     QPushButton *LoadButton;
+    QPushButton *DetectButton;
     QPushButton *CloseButton;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
@@ -34,19 +38,36 @@ public:
     {
         if (DocumentScannerGUIClass->objectName().isEmpty())
             DocumentScannerGUIClass->setObjectName(QStringLiteral("DocumentScannerGUIClass"));
-        DocumentScannerGUIClass->resize(600, 400);
+        DocumentScannerGUIClass->resize(301, 303);
         centralWidget = new QWidget(DocumentScannerGUIClass);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        LoadButton = new QPushButton(centralWidget);
+        layoutWidget = new QWidget(centralWidget);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(10, 160, 281, 83));
+        verticalLayout = new QVBoxLayout(layoutWidget);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        LoadButton = new QPushButton(layoutWidget);
         LoadButton->setObjectName(QStringLiteral("LoadButton"));
-        LoadButton->setGeometry(QRect(480, 270, 75, 23));
-        CloseButton = new QPushButton(centralWidget);
+
+        verticalLayout->addWidget(LoadButton);
+
+        DetectButton = new QPushButton(layoutWidget);
+        DetectButton->setObjectName(QStringLiteral("DetectButton"));
+
+        verticalLayout->addWidget(DetectButton);
+
+        CloseButton = new QPushButton(layoutWidget);
         CloseButton->setObjectName(QStringLiteral("CloseButton"));
-        CloseButton->setGeometry(QRect(480, 300, 75, 23));
+
+        verticalLayout->addWidget(CloseButton);
+
         DocumentScannerGUIClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(DocumentScannerGUIClass);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 600, 21));
+        menuBar->setGeometry(QRect(0, 0, 301, 21));
         DocumentScannerGUIClass->setMenuBar(menuBar);
         mainToolBar = new QToolBar(DocumentScannerGUIClass);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -63,8 +84,9 @@ public:
 
     void retranslateUi(QMainWindow *DocumentScannerGUIClass)
     {
-        DocumentScannerGUIClass->setWindowTitle(QApplication::translate("DocumentScannerGUIClass", "DocumentScannerGUI", nullptr));
+        DocumentScannerGUIClass->setWindowTitle(QApplication::translate("DocumentScannerGUIClass", "Document Scanner", nullptr));
         LoadButton->setText(QApplication::translate("DocumentScannerGUIClass", "Load", nullptr));
+        DetectButton->setText(QApplication::translate("DocumentScannerGUIClass", "Detect Text", nullptr));
         CloseButton->setText(QApplication::translate("DocumentScannerGUIClass", "Close", nullptr));
     } // retranslateUi
 

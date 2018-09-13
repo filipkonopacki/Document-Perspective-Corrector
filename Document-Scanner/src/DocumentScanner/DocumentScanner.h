@@ -21,13 +21,15 @@ public:
 	~DocumentScanner();
 	void LoadPages(std::vector<std::string> fileNames);
 	bool AreEmpty();
-
+	cv::Mat GetSourceImageAt(int index);
+	int GetNumberOfPages();
+	std::vector<cv::Mat> CorrectImagePerspective(int imageIndex, DetectionMode mode);
 
 
 
 private:
 	void LoadImage(std::string fileName);
-	void UpdatePages();
+	
 
 
 	std::vector<cv::Mat> sourceImages;

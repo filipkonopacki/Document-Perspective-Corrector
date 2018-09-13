@@ -4,7 +4,7 @@
 #include "QFileDialog"
 #include "QMessageBox"
 #include "../../Document-Scanner/Document-Scanner/src/DocumentScanner/DocumentScanner.h"
-#include "../AdditionalWindows/DetectionWindow.h"
+#include "../AdditionalWindows/PerspectiveCorrection/PerspectiveCorrectionWindow.h"
 
 
 

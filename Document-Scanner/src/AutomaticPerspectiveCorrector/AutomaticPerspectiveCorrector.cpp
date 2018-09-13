@@ -5,23 +5,22 @@
 #define SHOW(x){cv::imshow("TEST", x);cv::waitKey(0);}
 
 
-AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector(cv::Mat sourceImage)
-	:sourceImage(sourceImage)
+AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector()
 {
-	this->sourceImage = NormalizeImageSize(this->sourceImage);
-	processedImage = this->sourceImage.clone();
 }
 
-cv::Mat AutomaticPerspectiveCorrector::NormalizeImageSize(cv::Mat image)
+void AutomaticPerspectiveCorrector::NormalizeImageSize(cv::Mat &image)
 {
 	cv::Size normalizeSize = cv::Size(imageWidth, imageHeight);
 	cv::resize(image, image, normalizeSize, cv::INTER_LANCZOS4);
-	return image;
 }
 
-cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage()
+cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage(cv::Mat sourceImage)
 {
-	processedImage = PreprocessImage(processedImage);
+	this->sourceImage = sourceImage;
+	NormalizeImageSize(this->sourceImage);
+	processedImage = this->sourceImage.clone();
+	PreprocessImage(processedImage);
 	FindLargestCountur();
 	GetDocumentCorners();
 	CorrectPerspective();
@@ -29,11 +28,10 @@ cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage()
 	return processedImage;
 }
 
-cv::Mat AutomaticPerspectiveCorrector::PreprocessImage(cv::Mat image)
+void AutomaticPerspectiveCorrector::PreprocessImage(cv::Mat &image)
 {
 	cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
 	cv::threshold(image, image, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-	return image;
 }
 
 void AutomaticPerspectiveCorrector::FindLargestCountur()
@@ -100,6 +98,12 @@ void AutomaticPerspectiveCorrector::CorrectPerspective()
 	cv::warpPerspective(sourceImage, processedImage, homography, cv::Size(destinationImageWidth, destinationImageHeight));
 }
 
+int AutomaticPerspectiveCorrector::MeasureDistanceBetweenPoints(cv::Point a, cv::Point b)
+{
+	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
+}
+
+
 std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperRightOrBottomLeftCorner(int destinationImageWidth, int destinationImageHeight)
 {
 	std::vector<cv::Point> destinationCorners;
@@ -142,7 +146,3 @@ std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperLeftOrBo
 }
 
 
-int AutomaticPerspectiveCorrector::MeasureDistanceBetweenPoints(cv::Point a, cv::Point b)
-{
-	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
-}

@@ -17,7 +17,6 @@ public:
 
 private:
 	cv::Mat page;
-
 	std::vector<Line> lines;
 };
 

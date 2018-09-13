@@ -31,7 +31,7 @@ void DocumentScannerGUI::on_LoadButton_clicked()
 
 void DocumentScannerGUI::openDetectionWindow()
 {
-	DetectionWindow win("Detection Window",this);
+	PerspectiveCorrectionWindow win(scanner,this);
 	win.setModal(true);
 	win.exec();
 
