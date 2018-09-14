@@ -39,8 +39,38 @@ void PerspectiveCorrectionWindow::on_AutomaticButton_clicked()
 			correctedImages.push_back(image);
 	}
 
-	UpdateCorrectedImage();
-	QMessageBox::information(this, "Work done", "Image has been corrected! If result is not satisfying for you, choose manual correction method before saving.");
+	if (results.size() == 1)
+	{
+		UpdateCorrectedImage();
+		QMessageBox::information(this, "Work done", "Image has been corrected! If result is not satisfying for you, choose manual correction method before saving.");
+	}
+}
+
+void PerspectiveCorrectionWindow::on_ManualButton_clicked()
+{
+	std::vector<cv::Mat> results;
+	QMessageBox::information(this, "Manual correction", "Your image will be displayed. Select four corners in order by double clicking.");
+
+	if (ui.radioButton->isCheckable())
+	{
+		results = scanner.CorrectImagePerspective(imageIndex, ALL_MANUAL);
+	}
+	else
+	{
+		results = scanner.CorrectImagePerspective(imageIndex, MANUAL);
+	}
+
+	for (cv::Mat image : results)
+	{
+		if (!image.empty())
+			correctedImages.push_back(image);
+	}
+	 
+	if (results.size() == 1)
+	{
+		UpdateCorrectedImage();
+		QMessageBox::information(this, "Work done", "Image has been corrected! If result is not satisfying for you, choose manual correction method before saving.");
+	}
 }
 
 void PerspectiveCorrectionWindow::UpdateCorrectedImage()
@@ -49,5 +79,7 @@ void PerspectiveCorrectionWindow::UpdateCorrectedImage()
 	{
 		QImage image((uchar*)correctedImages[imageIndex].data, correctedImages[imageIndex].cols, correctedImages[imageIndex].rows,QImage::Format_RGB888);
 		ui.label_2->setPixmap(QPixmap::fromImage(image.scaled(ui.label_2->size())));
+		
 	}
 }
+

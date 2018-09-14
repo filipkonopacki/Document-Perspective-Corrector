@@ -28,6 +28,6 @@ private:
 private slots:
 	//void on_AbandonCorrectionButton_clicked();
 	void on_AutomaticButton_clicked();
-	//void on_ManualButton_clicked();
+	void on_ManualButton_clicked();
 	//void on_RadioButton_toggled(bool state);
 };

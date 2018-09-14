@@ -18,10 +18,6 @@ cv::Mat getCorrectedImage(cv::Mat image)
 
 	sourceImage = NormalizeImageSize(sourceImage);
 
-	std::cout << "Your document photo will be displayed. Double click on 4 corners in order.\nPress enter to continue" << std::endl;
-	std::cin.get();
-	std::cin.get();
-
 	cv::namedWindow("Window");
 	cv::setMouseCallback("Window", getCorrespondingPoints);
 

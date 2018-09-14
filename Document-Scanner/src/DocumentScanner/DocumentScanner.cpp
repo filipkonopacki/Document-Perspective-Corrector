@@ -43,7 +43,7 @@ cv::Mat DocumentScanner::GetSourceImageAt(int index)
 
 int DocumentScanner::GetNumberOfPages()
 {
-	return pages.size();
+	return sourceImages.size();
 }
 
 std::vector<cv::Mat> DocumentScanner::CorrectImagePerspective(int index, DetectionMode mode)
