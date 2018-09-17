@@ -74,3 +74,8 @@ std::vector<cv::Mat> DocumentScanner::CorrectImagePerspective(int index, Detecti
 
 	return result;
 }
+
+void DocumentScanner::PushPage(Page page)
+{
+	pages.push_back(page);
+}

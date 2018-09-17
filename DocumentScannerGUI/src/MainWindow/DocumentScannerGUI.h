@@ -23,5 +23,5 @@ private:
 
 private slots:
 	void on_LoadButton_clicked();
-	void openDetectionWindow();
+	void openCorrectorWindow();
 };

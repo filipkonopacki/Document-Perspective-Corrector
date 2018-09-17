@@ -29,7 +29,7 @@ public:
     QPushButton *SaveFileButton;
     QLabel *label;
     QLabel *label_2;
-    QPushButton *AbandonCorrectionButton;
+    QPushButton *DontChangeButton;
     QPushButton *SaveButton;
 
     void setupUi(QWidget *PerspectiveCorrectionWindow)
@@ -61,9 +61,9 @@ public:
         label_2 = new QLabel(PerspectiveCorrectionWindow);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(450, 70, 300, 400));
-        AbandonCorrectionButton = new QPushButton(PerspectiveCorrectionWindow);
-        AbandonCorrectionButton->setObjectName(QStringLiteral("AbandonCorrectionButton"));
-        AbandonCorrectionButton->setGeometry(QRect(320, 550, 121, 23));
+        DontChangeButton = new QPushButton(PerspectiveCorrectionWindow);
+        DontChangeButton->setObjectName(QStringLiteral("DontChangeButton"));
+        DontChangeButton->setGeometry(QRect(320, 550, 121, 23));
         SaveButton = new QPushButton(PerspectiveCorrectionWindow);
         SaveButton->setObjectName(QStringLiteral("SaveButton"));
         SaveButton->setGeometry(QRect(620, 600, 81, 23));
@@ -84,7 +84,7 @@ public:
         SaveFileButton->setText(QApplication::translate("PerspectiveCorrectionWindow", "Save file", nullptr));
         label->setText(QApplication::translate("PerspectiveCorrectionWindow", "TextLabel", nullptr));
         label_2->setText(QApplication::translate("PerspectiveCorrectionWindow", "Choose one of the correction methods", nullptr));
-        AbandonCorrectionButton->setText(QApplication::translate("PerspectiveCorrectionWindow", "Keep without change", nullptr));
+        DontChangeButton->setText(QApplication::translate("PerspectiveCorrectionWindow", "Keep without change", nullptr));
         SaveButton->setText(QApplication::translate("PerspectiveCorrectionWindow", "Save changes", nullptr));
     } // retranslateUi
 

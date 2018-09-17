@@ -117,7 +117,7 @@
     <string>Choose one of the correction methods</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="AbandonCorrectionButton">
+  <widget class="QPushButton" name="DontChangeButton">
    <property name="geometry">
     <rect>
      <x>320</x>

@@ -25,15 +25,15 @@ void DocumentScannerGUI::on_LoadButton_clicked()
 	}
 
 	QMessageBox::information(this, "Loading finished", "Your image(s) has been loaded!");
-	openDetectionWindow();
+	openCorrectorWindow();
 }
 
 
-void DocumentScannerGUI::openDetectionWindow()
+void DocumentScannerGUI::openCorrectorWindow()
 {
 	PerspectiveCorrectionWindow win(scanner,this);
 	win.setModal(true);
 	win.exec();
 
-	
+
 }

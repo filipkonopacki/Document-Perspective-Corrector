@@ -24,7 +24,7 @@ public:
 	cv::Mat GetSourceImageAt(int index);
 	int GetNumberOfPages();
 	std::vector<cv::Mat> CorrectImagePerspective(int imageIndex, DetectionMode mode);
-
+	void PushPage(Page page);
 
 
 private:
