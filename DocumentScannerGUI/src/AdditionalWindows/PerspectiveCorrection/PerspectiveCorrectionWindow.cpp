@@ -140,7 +140,7 @@ void PerspectiveCorrectionWindow::UpdateCorrectedImages(std::vector<cv::Mat> res
 
 void PerspectiveCorrectionWindow::UpdateCorrectedImageLabel()
 {
-	if (!correctedImages[imageIndex].empty())
+	if (!correctedImages.at(imageIndex).empty())
 	{
 		QImage image = LoadSourceImage(correctedImages[imageIndex]);
 		ui.label_2->setPixmap(QPixmap::fromImage(image.scaled(ui.label_2->size())));
@@ -167,3 +167,16 @@ void PerspectiveCorrectionWindow::on_SaveButton_clicked()
 	}
 }
 
+void PerspectiveCorrectionWindow::on_SaveFileButton_clicked()
+{
+	try
+	{
+		SaveFileWindow saveWindow(correctedImages.at(imageIndex), this);
+		saveWindow.setModal(true);
+		saveWindow.exec();
+	}
+	catch (std::out_of_range ex)
+	{
+		QMessageBox::warning(this, "Save error", "There is no corrected image to save!");
+	}
+}

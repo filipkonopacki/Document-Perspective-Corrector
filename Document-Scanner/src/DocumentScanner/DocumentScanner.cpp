@@ -53,21 +53,21 @@ std::vector<cv::Mat> DocumentScanner::CorrectImagePerspective(int index, Detecti
 	switch (mode)
 	{
 		case AUTO:
-			result.push_back(corrector.GetCorrectedImage(sourceImages[index]));
+			result.push_back(corrector.GetCorrectedImage(sourceImages.at(index)));
 			break;
 		case ALL_AUTO:
 			for (int i = index; i < sourceImages.size(); i++)
 			{
-				result.push_back(corrector.GetCorrectedImage(sourceImages[i]));
+				result.push_back(corrector.GetCorrectedImage(sourceImages.at(i)));
 			}
 			break;
 		case MANUAL:
-			result.push_back(getCorrectedImage(sourceImages[index]));
+			result.push_back(getCorrectedImage(sourceImages.at(index)));
 			break;
 		case ALL_MANUAL:
 			for (int i = index; i < sourceImages.size(); i++)
 			{
-				result.push_back(getCorrectedImage(sourceImages[i]));
+				result.push_back(getCorrectedImage(sourceImages.at(i)));
 			}
 			break;
 	}

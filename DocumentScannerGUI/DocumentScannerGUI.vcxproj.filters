@@ -39,6 +39,9 @@
     <ClCompile Include="src\AdditionalWindows\PerspectiveCorrection\PerspectiveCorrectionWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AdditionalWindows\SaveFile\SaveFileWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="src\MainWindow\DocumentScannerGUI.ui">
@@ -47,12 +50,18 @@
     <QtUic Include="src\AdditionalWindows\PerspectiveCorrection\PerspectiveCorrectionWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="src\AdditionalWindows\SaveFile\SaveFileWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="src\MainWindow\DocumentScannerGUI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="src\AdditionalWindows\PerspectiveCorrection\PerspectiveCorrectionWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="src\AdditionalWindows\SaveFile\SaveFileWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

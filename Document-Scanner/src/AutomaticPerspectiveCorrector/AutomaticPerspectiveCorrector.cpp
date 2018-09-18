@@ -44,7 +44,7 @@ void AutomaticPerspectiveCorrector::FindLargestCountur()
 	cv::findContours(processedImage, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
 	for (int i = 1; i < contours.size(); i++)
 	{
-		if (cv::contourArea(contours[i]) < eightyPercentOfMaxArea && cv::contourArea(contours[i]) > cv::contourArea(contours[largestContourIndex]))
+		if (cv::contourArea(contours.at(i)) < eightyPercentOfMaxArea && cv::contourArea(contours.at(i)) > cv::contourArea(contours.at(largestContourIndex)))
 			largestContourIndex = i;
 	}
 }
@@ -53,9 +53,9 @@ void AutomaticPerspectiveCorrector::GetDocumentCorners()
 {
 	std::vector<cv::Point> points;
 
-	for (int j = 0; j < contours[largestContourIndex].size(); j++)
+	for (int j = 0; j < contours.at(largestContourIndex).size(); j++)
 	{
-		points.push_back(contours[largestContourIndex][j]);
+		points.push_back(contours.at(largestContourIndex).at(j));
 	}
 
 	cv::convexHull(points, documentCorners);
@@ -78,8 +78,8 @@ void AutomaticPerspectiveCorrector::CorrectPerspective()
 	int destinationImageWidth;
 	int destinationImageHeight;
 
-	int firstSide = MeasureDistanceBetweenPoints(documentCorners[0], documentCorners[1]);
-	int secondSide = MeasureDistanceBetweenPoints(documentCorners[0], documentCorners[3]);
+	int firstSide = MeasureDistanceBetweenPoints(documentCorners.at(0), documentCorners.at(1));
+	int secondSide = MeasureDistanceBetweenPoints(documentCorners.at(0), documentCorners.at(3));
 
 	if (firstSide > secondSide)
 	{
@@ -107,7 +107,7 @@ int AutomaticPerspectiveCorrector::MeasureDistanceBetweenPoints(cv::Point a, cv:
 std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperRightOrBottomLeftCorner(int destinationImageWidth, int destinationImageHeight)
 {
 	std::vector<cv::Point> destinationCorners;
-	if (documentCorners[0].y < documentCorners[1].y)
+	if (documentCorners.at(0).y < documentCorners.at(1).y)
 	{
 		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, 0));
 		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
@@ -128,7 +128,7 @@ std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperRightOrB
 std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperLeftOrBottomRightCorner(int destinationImageWidth, int destinationImageHeight)
 {
 	std::vector<cv::Point> destinationCorners;
-	if (documentCorners[0].y > documentCorners[3].y)
+	if (documentCorners.at(0).y > documentCorners.at(3).y)
 	{
 		destinationCorners.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
 		destinationCorners.push_back(cv::Point(0, destinationImageHeight - 1));

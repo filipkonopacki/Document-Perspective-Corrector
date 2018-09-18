@@ -34,14 +34,14 @@ cv::Mat getCorrectedImage(cv::Mat image)
 	int destinationImageWidth;
 	int destinationImageHeight;
 
-	int firstSide = measureDistanceBetweenPoints(sourceCorrespondingPoints[0], sourceCorrespondingPoints[1]);
-	int secondSide = measureDistanceBetweenPoints(sourceCorrespondingPoints[0], sourceCorrespondingPoints[3]);
+	int firstSide = measureDistanceBetweenPoints(sourceCorrespondingPoints.at(0), sourceCorrespondingPoints.at(1));
+	int secondSide = measureDistanceBetweenPoints(sourceCorrespondingPoints.at(0), sourceCorrespondingPoints.at(3));
 
 	if (firstSide > secondSide)
 	{
 		destinationImageWidth = secondSide;
 		destinationImageHeight = firstSide;
-		if (sourceCorrespondingPoints[0].y < sourceCorrespondingPoints[1].y)
+		if (sourceCorrespondingPoints.at(0).y < sourceCorrespondingPoints.at(1).y)
 		{
 			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, 0));
 			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
@@ -60,7 +60,7 @@ cv::Mat getCorrectedImage(cv::Mat image)
 	{
 		destinationImageWidth = firstSide;
 		destinationImageHeight = secondSide;
-		if (sourceCorrespondingPoints[0].y > sourceCorrespondingPoints[3].y)
+		if (sourceCorrespondingPoints.at(0).y > sourceCorrespondingPoints.at(3).y)
 		{
 			destinationCorrespondingPoints.push_back(cv::Point(destinationImageWidth - 1, destinationImageHeight - 1));
 			destinationCorrespondingPoints.push_back(cv::Point(0, destinationImageHeight - 1));

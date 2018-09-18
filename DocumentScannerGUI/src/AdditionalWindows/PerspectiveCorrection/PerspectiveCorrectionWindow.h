@@ -5,16 +5,20 @@
 #include "ui_PerspectiveCorrectionWindow.h"
 //#include "../AfterCorrectionCheck/AfterCorrectionCheckWindow.h"
 #include "../../Document-Scanner/Document-Scanner/src/DocumentScanner/DocumentScanner.h"
+#include "../SaveFile/SaveFileWindow.h"
 
 
+#include <exception>
 #include <sstream>
 #include <string>
+
+std::string toString(int);
 
 class PerspectiveCorrectionWindow : public QDialog
 {
 	Q_OBJECT
 
-	friend class AfterCorrectionCheckWindow;
+	//friend class AfterCorrectionCheckWindow;
 
 public:
 	PerspectiveCorrectionWindow(DocumentScanner &scanner, QWidget *parent);
@@ -38,6 +42,7 @@ private slots:
 	void on_ManualButton_clicked();
 	void on_DontChangeButton_clicked();
 	void on_SaveButton_clicked();
+	void on_SaveFileButton_clicked();
 };
 
 
