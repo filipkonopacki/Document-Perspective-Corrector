@@ -31,7 +31,7 @@ std::string toString(int a)
 
 QImage PerspectiveCorrectionWindow::LoadSourceImage(cv::Mat sourceImage)
 {
-	std::string fileName = "tmp_im" + toString(imageIndex) + ".jpg";
+	std::string fileName = "tmp_im.jpg";
 	cv::imwrite(fileName, sourceImage);
 
 	QImage image;
@@ -105,11 +105,21 @@ void PerspectiveCorrectionWindow::on_DontChangeButton_clicked()
 
 void PerspectiveCorrectionWindow::UpdateCorrectedImages(std::vector<cv::Mat> results)
 {
-	for (cv::Mat image : results)
+	for (int i = 0; i < results.size(); i++)
 	{
-		if (!image.empty())
-			correctedImages.push_back(image);
+		if (!results.at(i).empty())
+		{
+			try 
+			{
+				correctedImages.at(imageIndex + i) = results.at(i);
+			}
+			catch (std::out_of_range ex)
+			{
+				correctedImages.push_back(results.at(i));
+			}
+		}
 	}
+
 
 	if (results.size() == 1)
 	{
@@ -126,9 +136,12 @@ void PerspectiveCorrectionWindow::UpdateCorrectedImages(std::vector<cv::Mat> res
 			//		Display all corrected images one by one and ask user if result is satisfying
 
 
-			//AfterCorrectionCheckWindow checker(correctedImages,this);
-			//checker.setModal(true);
-			//checker.exec();
+			AfterCorrectionCheckWindow checker(correctedImages, scanner, this);
+			checker.setModal(true);
+			checker.exec();
+
+			QMessageBox::information(this, "Work done", "All images have been corrected!");
+			this->close();
 		}
 		else
 		{

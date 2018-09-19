@@ -1,6 +1,9 @@
 #pragma once
 
-#include "../PerspectiveCorrection/CorrectorAndChecker.h"
+#include <QDialog>
+#include <QFileDialog>
+#include "ui_AfterCorrectionCheckWindow.h"
+#include "../PerspectiveCorrection/PerspectiveCorrectionWindow.h"
 
 
 class AfterCorrectionCheckWindow : public QDialog
@@ -8,19 +11,20 @@ class AfterCorrectionCheckWindow : public QDialog
 	Q_OBJECT
 
 public:
-	AfterCorrectionCheckWindow(std::vector<cv::Mat> correctedImages, PerspectiveCorrectionWindow &parentWindow, QWidget *parent);
+	AfterCorrectionCheckWindow(std::vector<cv::Mat> &correctedImages,DocumentScanner &scanner, QWidget *parent);
 	~AfterCorrectionCheckWindow();
 
 private:
 	void UpdateResultImageLabel();
-
+	void UpdateCorrectedImages(std::vector<cv::Mat> results);
 
 	Ui::AfterCorrectionCheckWindow ui;
 	std::vector<cv::Mat> correctedImages;
 	int imageIndex = 0;
+	DocumentScanner scanner;
 
 private slots:
-	//void on_SaveFileButton_clicked();
+	void on_SaveFileButton_clicked();
 	void on_AutomaticButton_clicked();
 	void on_ManualButton_clicked();
 	void on_DontChangeButton_clicked();

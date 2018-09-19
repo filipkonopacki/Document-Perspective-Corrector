@@ -69,7 +69,7 @@ public:
 
     void retranslateUi(QDialog *SaveFileWindow)
     {
-        SaveFileWindow->setWindowTitle(QApplication::translate("SaveFileWindow", "SaveFileWindow", nullptr));
+        SaveFileWindow->setWindowTitle(QApplication::translate("SaveFileWindow", "Save file", nullptr));
         browseButton->setText(QApplication::translate("SaveFileWindow", "Browse...", nullptr));
         acceptButton->setText(QApplication::translate("SaveFileWindow", "Ok", nullptr));
         widthLabel->setText(QApplication::translate("SaveFileWindow", "Image width:", nullptr));

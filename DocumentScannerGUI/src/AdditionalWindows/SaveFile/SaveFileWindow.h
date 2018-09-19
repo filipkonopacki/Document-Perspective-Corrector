@@ -14,6 +14,10 @@ public:
 	~SaveFileWindow();
 
 private:
+	bool ValidateFileFormat();
+
+
+
 	Ui::SaveFileWindow ui;
 	cv::Mat imageToSave;
 	std::string filePath = "C:\\";

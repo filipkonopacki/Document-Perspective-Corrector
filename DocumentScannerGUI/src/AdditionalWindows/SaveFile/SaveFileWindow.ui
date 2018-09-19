@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>SaveFileWindow</string>
+   <string>Save file</string>
   </property>
   <widget class="QLineEdit" name="filePathBox">
    <property name="geometry">

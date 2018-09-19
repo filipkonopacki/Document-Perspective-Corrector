@@ -18,7 +18,7 @@ SaveFileWindow::~SaveFileWindow()
 
 void SaveFileWindow::on_browseButton_clicked()
 {
-	QString fileName = QFileDialog::getSaveFileName(this, "Save image", QString::fromStdString(filePath),"Images (*.png *.jpg *.jpeg *.bmp *.gif)");
+	QString fileName = QFileDialog::getSaveFileName(this, "Save image", QString::fromStdString(filePath),"Images (*.png *.jpg *.jpeg *.bmp)");
 	if (fileName.isEmpty())
 		return;
 
@@ -28,7 +28,7 @@ void SaveFileWindow::on_browseButton_clicked()
 
 void SaveFileWindow::on_acceptButton_clicked()
 {
-	if (!filePath.empty())
+	if (ValidateFileFormat())
 	{
 		imageHeight = ui.heightBox->text().toInt();
 		imageWidth = ui.widthBox->text().toInt();
@@ -36,6 +36,18 @@ void SaveFileWindow::on_acceptButton_clicked()
 		cv::imwrite(filePath, imageToSave);
 		QMessageBox::information(this, "Success!", "File saved.");
 		this->close();
+	}
+	else
+	{
+		QMessageBox::critical(this, "Fail!", "Enter valid file path.");
+	}
+}
+
+bool SaveFileWindow::ValidateFileFormat()
+{
+	if (strstr(filePath.c_str(),".png") || strstr(filePath.c_str(), ".jpg") || strstr(filePath.c_str(), ".jpeg") || strstr(filePath.c_str(), ".bmp"))
+	{
+		return true;
 	}
 }
 

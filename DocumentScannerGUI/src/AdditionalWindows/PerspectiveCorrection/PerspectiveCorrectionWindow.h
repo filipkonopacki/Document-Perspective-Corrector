@@ -3,7 +3,7 @@
 #include <QDialog>
 #include <QMessageBox>
 #include "ui_PerspectiveCorrectionWindow.h"
-//#include "../AfterCorrectionCheck/AfterCorrectionCheckWindow.h"
+#include "../AfterCorrectionCheck/AfterCorrectionCheckWindow.h"
 #include "../../Document-Scanner/Document-Scanner/src/DocumentScanner/DocumentScanner.h"
 #include "../SaveFile/SaveFileWindow.h"
 
@@ -18,7 +18,7 @@ class PerspectiveCorrectionWindow : public QDialog
 {
 	Q_OBJECT
 
-	//friend class AfterCorrectionCheckWindow;
+	friend class AfterCorrectionCheckWindow;
 
 public:
 	PerspectiveCorrectionWindow(DocumentScanner &scanner, QWidget *parent);
@@ -27,7 +27,7 @@ public:
 private:
 	void UpdateSourceImageLabel();
 	void UpdateCorrectedImageLabel();
-	QImage LoadSourceImage(cv::Mat sourceImage);
+	static QImage LoadSourceImage(cv::Mat sourceImage);
 	void UpdateCorrectedImages(std::vector<cv::Mat> results);
 	
 	
