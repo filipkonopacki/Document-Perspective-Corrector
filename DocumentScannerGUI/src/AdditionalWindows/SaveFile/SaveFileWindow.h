@@ -16,13 +16,14 @@ public:
 private:
 	Ui::SaveFileWindow ui;
 	cv::Mat imageToSave;
-	std::string filePath;
+	std::string filePath = "C:\\";
 	int imageHeight;
 	int imageWidth;
-	float ratio;
+	double ratio;
 
 
 private slots:
 	void on_browseButton_clicked();
 	void on_acceptButton_clicked();
+	void on_aspectRatioCheck_stateChanged();
 };

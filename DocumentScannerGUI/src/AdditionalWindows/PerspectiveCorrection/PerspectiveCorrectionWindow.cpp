@@ -158,7 +158,7 @@ void PerspectiveCorrectionWindow::on_SaveButton_clicked()
 	imageIndex++;
 	if (imageIndex >= maxIndex)
 	{
-		QMessageBox::information(this, "Work done", "All images have been corrected and saved!");
+		QMessageBox::information(this, "Work done", "All images have been corrected!");
 		this->close();
 	}
 	else
