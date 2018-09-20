@@ -6,7 +6,6 @@ DocumentScanner::DocumentScanner()
 {
 }
 
-
 DocumentScanner::~DocumentScanner()
 {
 }
@@ -16,6 +15,8 @@ void DocumentScanner::LoadPages(std::vector<std::string> fileNames)
 {
 	if (sourceImages.size() != 0)
 		sourceImages.clear();
+	if (pages.size() != 0)
+		pages.clear();
 
 	for (std::string fileName : fileNames)
 		LoadImage(fileName);
@@ -27,24 +28,6 @@ void DocumentScanner::LoadImage(std::string fileName)
 	sourceImages.push_back(image);
 }
 
-bool DocumentScanner::AreEmpty()
-{
-	for (cv::Mat image : sourceImages)
-		if (image.empty())
-			return false;
-	
-	return true;
-}
-
-cv::Mat DocumentScanner::GetSourceImageAt(int index)
-{
-	return sourceImages.at(index);
-}
-
-int DocumentScanner::GetNumberOfPages()
-{
-	return sourceImages.size();
-}
 
 std::vector<cv::Mat> DocumentScanner::CorrectImagePerspective(int index, DetectionMode mode)
 {
@@ -75,13 +58,28 @@ std::vector<cv::Mat> DocumentScanner::CorrectImagePerspective(int index, Detecti
 	return result;
 }
 
+
+cv::Mat DocumentScanner::GetSourceImageAt(int index)
+{
+	return sourceImages.at(index);
+}
+
+int DocumentScanner::GetNumberOfPages()
+{
+	return sourceImages.size();
+}
+
+bool DocumentScanner::AreEmpty()
+{
+	for (cv::Mat image : sourceImages)
+		if (image.empty())
+			return false;
+
+	return true;
+}
+
 void DocumentScanner::PushPage(Page page)
 {
 	pages.push_back(page);
 }
 
-void DocumentScanner::Clear()
-{
-	sourceImages.clear();
-	pages.clear();
-}

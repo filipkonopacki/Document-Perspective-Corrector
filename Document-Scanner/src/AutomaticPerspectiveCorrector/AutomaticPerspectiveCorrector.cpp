@@ -9,12 +9,6 @@ AutomaticPerspectiveCorrector::AutomaticPerspectiveCorrector()
 {
 }
 
-void AutomaticPerspectiveCorrector::NormalizeImageSize(cv::Mat &image)
-{
-	cv::Size normalizeSize = cv::Size(imageWidth, imageHeight);
-	cv::resize(image, image, normalizeSize, cv::INTER_LANCZOS4);
-}
-
 cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage(cv::Mat sourceImage)
 {
 	this->sourceImage = sourceImage;
@@ -28,11 +22,23 @@ cv::Mat AutomaticPerspectiveCorrector::GetCorrectedImage(cv::Mat sourceImage)
 	return processedImage;
 }
 
+
+
+
+void AutomaticPerspectiveCorrector::NormalizeImageSize(cv::Mat &image)
+{
+	cv::Size normalizeSize = cv::Size(imageWidth, imageHeight);
+	cv::resize(image, image, normalizeSize, cv::INTER_LANCZOS4);
+}
+
 void AutomaticPerspectiveCorrector::PreprocessImage(cv::Mat &image)
 {
 	cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
 	cv::threshold(image, image, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
 }
+
+
+
 
 void AutomaticPerspectiveCorrector::FindLargestCountur()
 {
@@ -48,6 +54,9 @@ void AutomaticPerspectiveCorrector::FindLargestCountur()
 			largestContourIndex = i;
 	}
 }
+
+
+
 
 void AutomaticPerspectiveCorrector::GetDocumentCorners()
 {
@@ -68,6 +77,7 @@ void AutomaticPerspectiveCorrector::FindFourDocumentCorners(int epsilon)
 	if (documentCorners.size() != 4)
 		FindFourDocumentCorners(epsilon + 1);
 }
+
 
 
 
@@ -102,7 +112,6 @@ int AutomaticPerspectiveCorrector::MeasureDistanceBetweenPoints(cv::Point a, cv:
 {
 	return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
 }
-
 
 std::vector<cv::Point> AutomaticPerspectiveCorrector::GetCornersForUpperRightOrBottomLeftCorner(int destinationImageWidth, int destinationImageHeight)
 {

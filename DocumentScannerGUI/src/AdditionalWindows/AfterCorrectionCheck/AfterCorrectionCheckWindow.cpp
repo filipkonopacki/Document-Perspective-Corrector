@@ -11,12 +11,7 @@ AfterCorrectionCheckWindow::~AfterCorrectionCheckWindow()
 {
 }
 
-void AfterCorrectionCheckWindow::UpdateResultImageLabel()
-{
-	cv::Mat sourceImage = correctedImages->at(imageIndex);
-	QImage image = PerspectiveCorrectionWindow::LoadSourceImage(sourceImage);
-	ui.resultLabel->setPixmap(QPixmap::fromImage(image.scaled(ui.resultLabel->size())));
-}
+
 
 
 void AfterCorrectionCheckWindow::on_AutomaticButton_clicked()
@@ -46,6 +41,23 @@ void AfterCorrectionCheckWindow::on_DontChangeButton_clicked()
 	}
 }
 
+void AfterCorrectionCheckWindow::on_SaveFileButton_clicked()
+{
+	SaveFileWindow saveWindow(correctedImages->at(imageIndex),this);
+	saveWindow.setModal(true);
+	saveWindow.exec();
+}
+
+
+
+
+void AfterCorrectionCheckWindow::UpdateResultImageLabel()
+{
+	cv::Mat sourceImage = correctedImages->at(imageIndex);
+	QImage image = PerspectiveCorrectionWindow::LoadSourceImage(sourceImage);
+	ui.resultLabel->setPixmap(QPixmap::fromImage(image.scaled(ui.resultLabel->size())));
+}
+
 void AfterCorrectionCheckWindow::UpdateCorrectedImages(std::vector<cv::Mat> results)
 {
 	if (!results.at(0).empty())
@@ -53,12 +65,4 @@ void AfterCorrectionCheckWindow::UpdateCorrectedImages(std::vector<cv::Mat> resu
 		correctedImages->at(imageIndex) = results.at(0);
 	}
 	UpdateResultImageLabel();
-}
-
-
-void AfterCorrectionCheckWindow::on_SaveFileButton_clicked()
-{
-	SaveFileWindow saveWindow(correctedImages->at(imageIndex),this);
-	saveWindow.setModal(true);
-	saveWindow.exec();
 }

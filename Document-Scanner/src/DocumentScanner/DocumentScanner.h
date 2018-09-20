@@ -10,27 +10,21 @@
 
 
 
-
 enum DetectionMode { AUTO, MANUAL, ALL_AUTO, ALL_MANUAL };
 
 
 class DocumentScanner
 {
-
-	friend class DocumentScannerGUI;
-
 public:
 	DocumentScanner();
 	~DocumentScanner();
 	void LoadPages(std::vector<std::string> fileNames);
-	bool AreEmpty();
+	std::vector<cv::Mat> CorrectImagePerspective(int imageIndex, DetectionMode mode);
 	cv::Mat GetSourceImageAt(int index);
 	int GetNumberOfPages();
-	std::vector<cv::Mat> CorrectImagePerspective(int imageIndex, DetectionMode mode);
+	bool AreEmpty();
 	void PushPage(Page page);
-	std::vector<cv::Mat> GetCorrectedImages();
-	void Clear();
-
+	
 
 private:
 	void LoadImage(std::string fileName);

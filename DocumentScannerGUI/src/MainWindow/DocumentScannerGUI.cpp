@@ -9,7 +9,6 @@ DocumentScannerGUI::DocumentScannerGUI(QWidget *parent)
 
 void DocumentScannerGUI::on_LoadButton_clicked()
 {
-	scanner.Clear();
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Open files","",tr("Images (*.png *.jpg *.jpeg *.bmp)"));
 	std::vector<std::string> filePaths;
 

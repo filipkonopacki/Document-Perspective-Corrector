@@ -20,12 +20,12 @@ private:
 
 	Ui::AfterCorrectionCheckWindow ui;
 	std::vector<cv::Mat> *correctedImages;
-	int imageIndex = 0;
 	DocumentScanner *scanner;
+	int imageIndex = 0;
 
 private slots:
-	void on_SaveFileButton_clicked();
 	void on_AutomaticButton_clicked();
 	void on_ManualButton_clicked();
 	void on_DontChangeButton_clicked();
+	void on_SaveFileButton_clicked();
 };
