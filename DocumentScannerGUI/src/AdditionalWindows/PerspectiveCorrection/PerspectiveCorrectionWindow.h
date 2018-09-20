@@ -32,7 +32,7 @@ private:
 	
 	
 	Ui::PerspectiveCorrectionWindow ui;
-	DocumentScanner scanner;
+	DocumentScanner *scanner;
 	int imageIndex = 0;
 	int maxIndex;
 	std::vector<cv::Mat> correctedImages;

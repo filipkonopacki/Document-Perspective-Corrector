@@ -1,10 +1,9 @@
 #include "PerspectiveCorrectionWindow.h"
 
 PerspectiveCorrectionWindow::PerspectiveCorrectionWindow(DocumentScanner &scanner, QWidget *parent)
-	: QDialog(parent), scanner(scanner)
+	: QDialog(parent), scanner(&scanner)
 {
 	ui.setupUi(this);
-
 	maxIndex = scanner.GetNumberOfPages();
 	UpdateSourceImageLabel();
 }
@@ -15,7 +14,7 @@ PerspectiveCorrectionWindow::~PerspectiveCorrectionWindow()
 
 void PerspectiveCorrectionWindow::UpdateSourceImageLabel()
 {
-	cv::Mat sourceImage = scanner.GetSourceImageAt(imageIndex);
+	cv::Mat sourceImage = scanner->GetSourceImageAt(imageIndex);
 	QImage image = LoadSourceImage(sourceImage);
 	ui.label->setPixmap(QPixmap::fromImage(image.scaled(ui.label->size())));
 
@@ -53,11 +52,11 @@ void PerspectiveCorrectionWindow::on_AutomaticButton_clicked()
 	std::vector<cv::Mat> results;
 	if (ui.radioButton->isChecked())
 	{
-		results = (scanner.CorrectImagePerspective(imageIndex, ALL_AUTO));
+		results = (scanner->CorrectImagePerspective(imageIndex, ALL_AUTO));
 	}
 	else
 	{
-		results = scanner.CorrectImagePerspective(imageIndex, AUTO);
+		results = scanner->CorrectImagePerspective(imageIndex, AUTO);
 	}
 
 	UpdateCorrectedImages(results);
@@ -70,11 +69,11 @@ void PerspectiveCorrectionWindow::on_ManualButton_clicked()
 
 	if (ui.radioButton->isChecked())
 	{
-		results = scanner.CorrectImagePerspective(imageIndex, ALL_MANUAL);
+		results = scanner->CorrectImagePerspective(imageIndex, ALL_MANUAL);
 	}
 	else
 	{
-		results = scanner.CorrectImagePerspective(imageIndex, MANUAL);
+		results = scanner->CorrectImagePerspective(imageIndex, MANUAL);
 	}
 
 	UpdateCorrectedImages(results);
@@ -87,12 +86,12 @@ void PerspectiveCorrectionWindow::on_DontChangeButton_clicked()
 	{
 		for (int i = imageIndex; i < maxIndex; i++)
 		{
-			results.push_back(scanner.GetSourceImageAt(imageIndex));
+			results.push_back(scanner->GetSourceImageAt(imageIndex));
 		}
 	}
 	else
 	{
-		results.push_back(scanner.GetSourceImageAt(imageIndex));
+		results.push_back(scanner->GetSourceImageAt(imageIndex));
 	}
 	UpdateCorrectedImages(results);
 }
@@ -132,22 +131,12 @@ void PerspectiveCorrectionWindow::UpdateCorrectedImages(std::vector<cv::Mat> res
 
 		if (reply == QMessageBox::Yes)
 		{
-			// TODO:
-			//		Display all corrected images one by one and ask user if result is satisfying
-
-
-			AfterCorrectionCheckWindow checker(correctedImages, scanner, this);
+			AfterCorrectionCheckWindow checker(correctedImages, *scanner, this);
 			checker.setModal(true);
 			checker.exec();
-
-			QMessageBox::information(this, "Work done", "All images have been corrected!");
-			this->close();
 		}
-		else
-		{
-			for (imageIndex; imageIndex < maxIndex; imageIndex++)
-				on_SaveButton_clicked();
-		}
+		for (int i = imageIndex; i < maxIndex; i++)
+			on_SaveButton_clicked();
 	}
 }
 
@@ -155,7 +144,7 @@ void PerspectiveCorrectionWindow::UpdateCorrectedImageLabel()
 {
 	if (!correctedImages.at(imageIndex).empty())
 	{
-		QImage image = LoadSourceImage(correctedImages[imageIndex]);
+		QImage image = LoadSourceImage(correctedImages.at(imageIndex));
 		ui.label_2->setPixmap(QPixmap::fromImage(image.scaled(ui.label_2->size())));
 	}
 }
@@ -167,7 +156,7 @@ void PerspectiveCorrectionWindow::UpdateCorrectedImageLabel()
 
 void PerspectiveCorrectionWindow::on_SaveButton_clicked()
 {
-	scanner.PushPage(Page(correctedImages[imageIndex]));
+	scanner->PushPage(Page(correctedImages.at(imageIndex)));
 	imageIndex++;
 	if (imageIndex >= maxIndex)
 	{

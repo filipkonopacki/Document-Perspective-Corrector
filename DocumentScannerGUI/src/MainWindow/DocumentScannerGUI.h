@@ -16,12 +16,12 @@ public:
 	DocumentScannerGUI(QWidget *parent = Q_NULLPTR);
 
 private:
+	void openCorrectorWindow();
+
+
 	Ui::DocumentScannerGUIClass ui;
 	DocumentScanner scanner;
-	
-
-
 private slots:
 	void on_LoadButton_clicked();
-	void openCorrectorWindow();
+	void on_DetectButton_clicked();
 };

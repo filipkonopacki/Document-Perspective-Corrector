@@ -79,3 +79,9 @@ void DocumentScanner::PushPage(Page page)
 {
 	pages.push_back(page);
 }
+
+void DocumentScanner::Clear()
+{
+	sourceImages.clear();
+	pages.clear();
+}

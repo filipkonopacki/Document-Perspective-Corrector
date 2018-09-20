@@ -9,6 +9,7 @@ DocumentScannerGUI::DocumentScannerGUI(QWidget *parent)
 
 void DocumentScannerGUI::on_LoadButton_clicked()
 {
+	scanner.Clear();
 	QStringList fileNames = QFileDialog::getOpenFileNames(this, "Open files","",tr("Images (*.png *.jpg *.jpeg *.bmp)"));
 	std::vector<std::string> filePaths;
 
@@ -36,4 +37,12 @@ void DocumentScannerGUI::openCorrectorWindow()
 	win.exec();
 
 
+}
+
+
+void DocumentScannerGUI::on_DetectButton_clicked()
+{
+	int numberOfPages = scanner.pages.size();
+	QString n = QString::fromStdString(toString(numberOfPages));
+	QMessageBox::information(this, "Detected pages", "Number of pages " + n);
 }

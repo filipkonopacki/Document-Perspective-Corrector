@@ -19,9 +19,9 @@ private:
 	void UpdateCorrectedImages(std::vector<cv::Mat> results);
 
 	Ui::AfterCorrectionCheckWindow ui;
-	std::vector<cv::Mat> correctedImages;
+	std::vector<cv::Mat> *correctedImages;
 	int imageIndex = 0;
-	DocumentScanner scanner;
+	DocumentScanner *scanner;
 
 private slots:
 	void on_SaveFileButton_clicked();

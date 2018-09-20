@@ -16,6 +16,9 @@ enum DetectionMode { AUTO, MANUAL, ALL_AUTO, ALL_MANUAL };
 
 class DocumentScanner
 {
+
+	friend class DocumentScannerGUI;
+
 public:
 	DocumentScanner();
 	~DocumentScanner();
@@ -25,6 +28,8 @@ public:
 	int GetNumberOfPages();
 	std::vector<cv::Mat> CorrectImagePerspective(int imageIndex, DetectionMode mode);
 	void PushPage(Page page);
+	std::vector<cv::Mat> GetCorrectedImages();
+	void Clear();
 
 
 private:
