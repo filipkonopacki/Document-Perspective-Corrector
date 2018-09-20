@@ -36,22 +36,23 @@ void AfterCorrectionCheckWindow::on_ManualButton_clicked()
 void AfterCorrectionCheckWindow::on_DontChangeButton_clicked()
 {
 	imageIndex++;
-	UpdateResultImageLabel();
+	if(imageIndex >= correctedImages.size())
+	{
+		this->close();
+	}
+	else
+	{
+		UpdateResultImageLabel();
+	}
 }
 
 void AfterCorrectionCheckWindow::UpdateCorrectedImages(std::vector<cv::Mat> results)
 {
 	if (!results.at(0).empty())
 	{
-		try
-		{
-			correctedImages.at(imageIndex) = results.at(0);
-		}
-		catch (std::out_of_range ex)
-		{
-			correctedImages.push_back(results.at(0));
-		}
+		correctedImages.at(imageIndex) = results.at(0);
 	}
+	UpdateResultImageLabel();
 }
 
 

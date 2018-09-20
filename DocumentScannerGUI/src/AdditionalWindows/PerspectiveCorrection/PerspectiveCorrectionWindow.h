@@ -25,9 +25,9 @@ public:
 	~PerspectiveCorrectionWindow();
 
 private:
+	static QImage LoadSourceImage(cv::Mat sourceImage);
 	void UpdateSourceImageLabel();
 	void UpdateCorrectedImageLabel();
-	static QImage LoadSourceImage(cv::Mat sourceImage);
 	void UpdateCorrectedImages(std::vector<cv::Mat> results);
 	
 	

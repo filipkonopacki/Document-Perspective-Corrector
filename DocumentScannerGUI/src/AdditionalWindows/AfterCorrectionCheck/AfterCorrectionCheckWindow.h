@@ -4,7 +4,7 @@
 #include <QFileDialog>
 #include "ui_AfterCorrectionCheckWindow.h"
 #include "../PerspectiveCorrection/PerspectiveCorrectionWindow.h"
-
+#include "../../../Document-Scanner/Document-Scanner/src/DocumentScanner/DocumentScanner.h"
 
 class AfterCorrectionCheckWindow : public QDialog
 {

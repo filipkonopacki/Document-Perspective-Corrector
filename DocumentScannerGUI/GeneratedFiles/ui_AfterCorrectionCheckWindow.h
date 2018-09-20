@@ -26,7 +26,6 @@ public:
     QPushButton *ManualButton;
     QLabel *label_3;
     QLabel *resultLabel;
-    QPushButton *pushButton;
 
     void setupUi(QDialog *AfterCorrectionCheckWindow)
     {
@@ -51,9 +50,6 @@ public:
         resultLabel = new QLabel(AfterCorrectionCheckWindow);
         resultLabel->setObjectName(QStringLiteral("resultLabel"));
         resultLabel->setGeometry(QRect(110, 50, 300, 400));
-        pushButton = new QPushButton(AfterCorrectionCheckWindow);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(20, 240, 75, 23));
 
         retranslateUi(AfterCorrectionCheckWindow);
 
@@ -69,7 +65,6 @@ public:
         ManualButton->setText(QApplication::translate("AfterCorrectionCheckWindow", "Manual", nullptr));
         label_3->setText(QApplication::translate("AfterCorrectionCheckWindow", "Result", nullptr));
         resultLabel->setText(QApplication::translate("AfterCorrectionCheckWindow", "Choose one of the correction methods", nullptr));
-        pushButton->setText(QApplication::translate("AfterCorrectionCheckWindow", "PushButton", nullptr));
     } // retranslateUi
 
 };
